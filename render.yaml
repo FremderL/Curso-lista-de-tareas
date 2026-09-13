@@ -1,0 +1,17 @@
+# Blueprint de Render — https://render.com/docs/blueprint-spec
+# Con este archivo en la raíz del repo, Render configura el sitio solo:
+# Dashboard → New + → Blueprint → selecciona este repositorio → Apply.
+services:
+  - type: web
+    name: mi-lista-de-tareas
+    runtime: static
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
+    headers:
+      - path: /*
+        name: Cache-Control
+        value: no-cache
+    routes:
+      - type: rewrite
+        source: /
+        destination: /index.html

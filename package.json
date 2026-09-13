@@ -1,0 +1,12 @@
+{
+  "name": "curso-lista-de-tareas",
+  "version": "1.0.0",
+  "description": "Curso interactivo: crea tu Lista de Tareas con HTML, CSS y JS (PWA + GitHub/Render)",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

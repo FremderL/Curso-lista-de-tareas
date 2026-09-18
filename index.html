@@ -37,7 +37,7 @@ code.inline,.qfb code,.box code,li code,p code,td code,.exsub code,.lmeta code,.
 .app{display:grid;grid-template-columns:290px minmax(0,1fr);align-items:start}
 .maincol{min-width:0}
 #backdrop{display:none}
-#topbar{display:flex;align-items:center;gap:16px;background:var(--card);border-bottom:1px solid var(--line);padding:0 20px;min-height:58px;position:sticky;top:0;z-index:40}
+#topbar{display:flex;align-items:center;gap:16px;background:var(--card);border-bottom:1px solid var(--line);padding:0 20px;min-height:58px;position:sticky;top:0;z-index:120}
 .brand{display:flex;align-items:center;gap:11px;white-space:nowrap}
 .logo-mark{width:32px;height:32px;flex:none;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;font-size:16px;box-shadow:var(--sh-xs)}
 .brand-text{line-height:1.2}
@@ -332,6 +332,46 @@ ol.steps li:not(:last-child)::after{content:"";position:absolute;left:13px;top:3
 #sidebar::-webkit-scrollbar-thumb{background:#cfd4e0;border-radius:99px;border:2px solid var(--bg)}
 #sidebar::-webkit-scrollbar-track{background:transparent}
 
+/* ===== Libro de texto ===== */
+.book-pills{display:flex;gap:7px;flex-wrap:wrap;margin:14px 0 20px}
+.bpill{border:1px solid var(--line);background:#fff;border-radius:99px;padding:7px 13px;font-size:12px;font-weight:750;cursor:pointer;color:#3d4657}
+.bpill:hover{background:#f4f6fd}
+.bpill.active{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* ===== Login / cuentas ===== */
+.chip.user{display:none;font-size:12px;font-weight:750;padding:6px 12px;border-radius:99px;background:var(--brand-soft);color:var(--brand-ink);border:none;cursor:pointer;font-family:inherit;white-space:nowrap}
+.chip.user:hover{background:#e2e6ff}
+#authLayer{display:none}
+#authLayer.show{display:block;position:fixed;inset:0;z-index:100;overflow-y:auto;
+  background:
+    radial-gradient(700px 340px at 85% -10%, rgba(139,92,246,.5), transparent 60%),
+    radial-gradient(560px 300px at -5% 110%, rgba(56,130,246,.45), transparent 60%),
+    linear-gradient(135deg,#171338 0%,#241f5c 55%,#302774 100%)}
+.auth-wrap{min-height:100%;display:grid;place-items:center;padding:28px 16px}
+.auth-card{width:100%;max-width:430px;background:#fff;border-radius:20px;box-shadow:0 24px 70px rgba(8,6,30,.5);overflow:hidden}
+.auth-head{padding:26px 28px 0;text-align:center}
+.auth-logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;font-size:26px;margin:0 auto 12px;box-shadow:0 8px 20px rgba(79,70,229,.4)}
+.auth-head h1{font-size:20px;letter-spacing:-.02em}
+.auth-head p{font-size:12.5px;color:var(--muted);margin-top:4px}
+.auth-tabs{display:flex;gap:4px;margin:18px 20px 0;background:var(--line2);border-radius:11px;padding:4px}
+.auth-tab{flex:1;border:none;background:transparent;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:750;cursor:pointer;color:var(--muted);font-family:inherit}
+.auth-tab.active{background:#fff;color:var(--ink);box-shadow:var(--sh-xs)}
+.auth-body{padding:18px 24px 8px;display:grid;gap:11px}
+.auth-field label{display:block;font-size:12px;font-weight:750;color:var(--muted);margin-bottom:4px}
+.auth-field input{width:100%;border:1px solid #d4d9e3;border-radius:10px;padding:10px 13px;font-size:14px;outline:none;font-family:inherit;color:var(--ink)}
+.auth-field input:focus{border-color:var(--brand);box-shadow:0 0 0 3px #e3e0ff}
+.auth-msg{font-size:12.5px;font-weight:650;border-radius:9px;padding:8px 12px;display:none}
+.auth-msg.show{display:block}
+.auth-msg.err{background:var(--bad-bg);color:var(--bad);box-shadow:inset 0 0 0 1px var(--bad-line)}
+.auth-msg.ok{background:var(--ok-bg);color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok-line)}
+.auth-users{font-size:11.5px;color:var(--muted);text-align:center}
+.auth-actions{padding:6px 24px 4px;display:grid;gap:9px}
+.auth-div{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11.5px;font-weight:700}
+.auth-div::before,.auth-div::after{content:"";flex:1;height:1px;background:var(--line)}
+.auth-note{padding:10px 24px 4px;text-align:center;font-size:11px;color:var(--muted);line-height:1.55}
+.auth-reset{background:none;border:none;color:var(--muted);font-size:11px;cursor:pointer;text-decoration:underline;display:block;margin:0 auto;padding:2px 24px 22px;font-family:inherit;width:100%}
+.auth-reset:hover{color:var(--bad)}
+
 /* ===== Responsive ===== */
 @media (max-width:920px){
   .app{grid-template-columns:1fr}
@@ -371,6 +411,7 @@ ol.steps li:not(:last-child)::after{content:"";position:absolute;left:13px;top:3
       </div>
       <div class="topprogress"><div class="bar"><div id="topBar"></div></div><span id="topPct">0%</span></div>
       <span class="chip grade" id="topGrade">Calificación: —</span>
+      <button class="chip user" id="topUser" data-action="auth-logout" title="Cerrar sesión">👤</button>
     </header>
     <main id="content" tabindex="-1">
       <noscript>
@@ -385,6 +426,7 @@ ol.steps li:not(:last-child)::after{content:"";position:absolute;left:13px;top:3
     </main>
   </div>
 </div>
+<div id="authLayer"></div>
 <script>
 'use strict';
 /* ============================================================
@@ -714,7 +756,7 @@ h1 {
     {t:'quiz', questions:[
       {type:'mc', q:'¿Qué propiedad cambia el color del FONDO de un elemento?', options:['color','background-color','bgcolor','background-text'], correct:1, pts:10, explain:'color = color del texto; background-color = color del fondo.'},
       {type:'mc', q:'El código hex <code>#ff0000</code> corresponde a…', options:['azul puro','verde puro','rojo puro','blanco'], correct:2, pts:10, explain:'El formato es RRGGBB: ff de rojo al máximo, 00 de verde y 00 de azul → rojo puro.'},
-      {type:'fill', q:'Escribe la propiedad que centra un texto horizontalmente:', accept:['text-align'], re:'^\\s*text[- ]?align\\s*$', show:'text-align: center;', pts:10, hint:'Empieza con “text”…'}
+      {type:'fill', q:'Escribe la propiedad que centra un texto horizontalmente:', accept:['text-align','text-align: center','text-align:center'], re:'^\\s*text\\s*-\\s*align\\s*(:\\s*center)?\\s*;?\\s*$', show:'text-align: center;', pts:10, hint:'Empieza con “text”…'}
     ]}
   ]},
 
@@ -1984,20 +2026,624 @@ git push`},
 /* ============================ EXAMEN FINAL ============================ */
 const EXAM = {
   questions:[
+    /* ---- Módulo 1 · HTML ---- */
     {type:'mc', q:'M1 · ¿Qué etiqueta crea el área oficial para capturar datos del usuario?', options:['&lt;div&gt;','&lt;form&gt;','&lt;table&gt;','&lt;section&gt;'], correct:1, pts:10, explain:'El <form> agrupa campos y maneja el evento submit (incluso con Enter).'},
-    {type:'mc', q:'M2 · ¿Cuál selector CSS apunta al elemento con id="menu"?', options:['menu','#menu','.menu','*menu'], correct:1, pts:10, explain:'Numeral para ids, punto para clases, nombre puro para etiquetas.'},
+    {type:'fill', q:'M1 · Escribe el ATRIBUTO del &lt;label&gt; que lo vincula con el input por su id:', accept:['for'], re:'^\\s*for\\s*$', show:'for="entrada-tarea"', pts:10, hint:'Son 3 letras: “para” en inglés.'},
+    {type:'mc', q:'M1 · Para una lista de pasos EN ORDEN (1, 2, 3…) se usa:', options:['&lt;ul&gt;','&lt;ol&gt;','&lt;dl&gt;','&lt;li&gt; sola'], correct:1, pts:10, explain:'ol = ordered list (numerada); ul = unordered list (viñetas).'},
+    /* ---- Módulo 2 · CSS ---- */
+    {type:'mc', q:'M2 · ¿Cuál selector apunta al elemento con id="menu"?', options:['menu','#menu','.menu','*menu'], correct:1, pts:10, explain:'Numeral para ids, punto para clases, nombre puro para etiquetas.'},
     {type:'mc', q:'M2 · Espacio INTERIOR entre el borde y el contenido de una caja:', options:['margin','padding','gap','border'], correct:1, pts:10, explain:'Padding = adentro; margin = afuera.'},
+    {type:'mc', q:'M2 · El selector <code>.tarea.completada</code> (sin espacio) selecciona…', options:['cualquier .completada dentro de .tarea','un elemento que tenga AMBAS clases','la primera tarea de la lista','dos elementos separados'], correct:1, pts:10, explain:'Sin espacio = ambas clases en el MISMO elemento. Con espacio = descendiente.'},
+    {type:'mc', q:'M2 · En flexbox, ¿qué propiedad centra los hijos VERTICALMENTE en una fila?', options:['justify-content','align-items','vertical-align','center-row'], correct:1, pts:10, explain:'align-items controla el eje transversal (vertical en una fila); justify-content, el principal.'},
+    {type:'fill', q:'M2 · Propiedad CSS que SUAVIZA los cambios de estilo durante un tiempo determinado:', accept:['transition'], re:'^\\s*transition\\s*$', show:'transition: background-color 0.25s;', pts:10, hint:'En inglés: “transición”.'},
+    /* ---- Módulo 3 · JavaScript ---- */
     {type:'mc', q:'M3 · <code>document.createElement("li")</code>…', options:['inserta un li visible al instante','crea el li en memoria hasta que appendChild lo cuelgue del DOM','borra los li existentes','renombra el ul'], correct:1, pts:10, explain:'Crear (memoria) y colgar (DOM) son pasos separados.'},
-    {type:'mc', q:'M3 · ¿Qué hace <code>lista.appendChild(li)</code>?', options:['Agrega li como ÚLTIMO hijo de lista','Agrega li al inicio','Reemplaza lista por li','Copia la página'], correct:0, pts:10, explain:'appendChild cuelga al final; si el nodo ya estaba en el DOM, lo mueve.'},
+    {type:'mc', q:'M3 · <code>lista.appendChild(li)</code> inserta el li…', options:['como ÚLTIMO hijo de lista','al inicio','en orden alfabético','en una pestaña nueva'], correct:0, pts:10, explain:'appendChild cuelga al final; si el nodo ya estaba en el DOM, lo mueve.'},
     {type:'mc', q:'M3 · Para evitar que el formulario recargue la página al enviar:', options:['evento.stopPage()','evento.preventDefault()','form.noReload = true','return false en el HTML'], correct:1, pts:10, explain:'preventDefault cancela el comportamiento por defecto del navegador.'},
     {type:'mc', q:'M3 · Para leer el texto de un &lt;input&gt; usas <code>.value</code>; para ponerle texto a un &lt;li&gt;…', options:['li.value','li.textContent = "texto"','li.src','li.input'], correct:1, pts:10, explain:'textContent define el texto plano de un elemento.'},
+    {type:'mc', q:'M3 · ¿Qué afirmación sobre const y let es correcta?', options:['const impide REASIGNAR el nombre, pero el contenido de objetos/arrays puede cambiar','const congela el contenido para siempre','let no permite cambiar el valor','son exactamente iguales'], correct:0, pts:10, explain:'const fija la referencia: tareas.push() sigue siendo válido; tareas = otraCosa, no.'},
+    {type:'mc', q:'M3 · <code>tareas.splice(indice, 1)</code> hace…', options:['elimina 1 elemento en esa posición','agrega 1 elemento al final','copia el array completo','ordena alfabéticamente'], correct:0, pts:10, explain:'splice(pos, cantidad) elimina desde esa posición la cantidad indicada.'},
+    {type:'mc', q:'M3 · En <code>tareas.forEach(function(tarea, indice){…})</code>, ¿qué es indice?', options:['El total de tareas','La posición del elemento actual','El id del li','Un booleano'], correct:1, pts:10, explain:'forEach entrega (elemento, posición) en cada vuelta; ese índice sirve para splice.'},
+    {type:'tf', q:'M3 · El evento submit de un formulario también se dispara al presionar Enter dentro de un input de texto.', options:['Verdadero','Falso'], correct:0, pts:10, explain:'Verdadero: por eso escuchamos submit del form y no click del botón; cubre ambas formas de enviar.'},
+    /* ---- Módulo 4 · Bootstrap ---- */
     {type:'mc', q:'M4 · El botón ☰ del navbar no responde. Causa más probable:', options:['Falta el JS bundle de Bootstrap antes de </body>','Falta el h1','El CSS propio está mal','Sobran clases'], correct:0, pts:10, explain:'El collapse lo opera el JS de Bootstrap; después revisa que data-bs-target coincida con el id.'},
+    {type:'mc', q:'M4 · La clase <code>container</code> de Bootstrap…', options:['centra el contenido y limita su ancho','pinta de azul','crea una tabla','es obligatoria en todo HTML'], correct:0, pts:10, explain:'Es el equivalente a nuestro .contenedor: max-width + margin auto.'},
+    {type:'mc', q:'M4 · <code>d-flex justify-content-between align-items-center</code> logra que…', options:['el texto quede a la izquierda y el botón a la derecha, centrados verticalmente','todo quede centrado en columna','los elementos se apilen','la lista desaparezca en móvil'], correct:0, pts:10, explain:'Es el flexbox del Módulo 2 traducido a utilidades de Bootstrap.'},
+    /* ---- Módulo 5 · localStorage y PWA ---- */
     {type:'mc', q:'M5 · localStorage solo guarda texto; para almacenar el array de tareas:', options:['localStorage.setObject("t", tareas)','setItem + JSON.stringify (y JSON.parse para leer)','No se pueden guardar listas','Con appendChild'], correct:1, pts:10, explain:'JSON.stringify serializa al guardar; JSON.parse al leer.'},
-    {type:'mc', q:'M5/M6 · El evento del service worker que responde peticiones incluso offline es…', options:['install','activate','fetch','push'], correct:2, pts:10, explain:'fetch intercepta cada petición: caches.match primero, red después. Y Pages funciona porque da HTTPS.'}
+    {type:'mc', q:'M5 · Si localStorage guardó texto corrupto, <code>JSON.parse</code> lanzará un error. ¿Qué nos protege?', options:['Un bloque try/catch al cargar','Borrar el CSS','Recargar la página con F5','Usar más appendChild'], correct:0, pts:10, explain:'try/catch captura el error y la app puede seguir con un array vacío.'},
+    {type:'mc', q:'M5 · Tras borrar una tarea con splice, el patrón correcto continúa con…', options:['guardarTareas() y luego renderizarTareas()','reload() y sleep()','createElement y appendChild directo','nada más'], correct:0, pts:10, explain:'Estado actualizado → persistir → redibujar. Siempre el mismo ritual.'},
+    {type:'mc', q:'M5 · El manifest requiere, para poder instalar la PWA, íconos…', options:['de cualquier tamaño','192×192 y 512×512 en PNG','solo favicon .ico','en formato JPG'], correct:1, pts:10, explain:'192 y 512 px en PNG cubren las densidades estándar que pide Chrome.'},
+    {type:'mc', q:'M5 · ¿Qué NO puede hacer un service worker?', options:['Interceptar peticiones de red','Guardar archivos en caché','Modificar el DOM de la página directamente','Responder sin internet'], correct:2, pts:10, explain:'El SW vive en otro hilo: no toca el DOM; su territorio es la red y la caché.'},
+    {type:'mc', q:'M5 · Publicas cambios pero tus usuarios ven la versión vieja. Causa típica:', options:['No subiste la versión de CACHE_NAME (v1 → v2)','El CSS es muy bonito','Falta el favicon','El manifest pesa mucho'], correct:0, pts:10, explain:'Sin versión nueva de caché, el SW sigue sirviendo los archivos antiguos.'},
+    /* ---- Módulo 6 · Publicación ---- */
+    {type:'mc', q:'M6 · ¿Cuál es la diferencia correcta entre Git y GitHub?', options:['Son lo mismo','Git es control de versiones local; GitHub aloja repos Git en la nube','GitHub compila el código','Git solo funciona con internet'], correct:1, pts:10, explain:'Git es la herramienta local de versiones; GitHub, la nube para colaborar y publicar.'},
+    {type:'mc', q:'M6 · Orden correcto para publicar tu trabajo por primera vez:', options:['git add . → git commit -m "…" → git push','git push → git commit → git add .','git commit → git add . → git install','git download → git upload'], correct:0, pts:10, explain:'Primero preparas (add), luego fotografías (commit) y al final subes (push).'},
+    {type:'fill', q:'M6 · Comando que descarga un repositorio remoto completo a tu computadora:', accept:['git clone'], re:'^\\s*git\\s+clone\\s*$', show:'git clone URL', pts:10, hint:'En inglés: “clonar”.'},
+    {type:'mc', q:'M6 · El usuario "ana" publica el repo "portafolio" con GitHub Pages. La URL será:', options:['https://ana.github.io/portafolio/','https://portafolio.com/ana','https://github.com/portafolio','https://ana.pages.dev'], correct:0, pts:10, explain:'El formato es usuario.github.io/nombre-del-repo.'},
+    {type:'tf', q:'M6 · En Render, un Static Site gratuito se “duerme” tras 15 minutos de inactividad.', options:['Verdadero','Falso'], correct:1, pts:10, explain:'Falso: eso pasa con los Web Services gratuitos. Los Static Sites se sirven desde CDN y no se duermen.'}
   ]
 };
 
-/* ============================ PROYECTO FINAL: ARCHIVOS ============================ */
+/* ============================ LIBRO DE TEXTO ============================ */
+const TEXTBOOK = [
+  { n:1, emoji:'🌐', short:'La web por dentro', title:'Cómo funciona la web por dentro', time:'15 min', blocks:[
+    {t:'p', h:'Cuando presionas Enter, tu URL viaja: 1) el <b>DNS</b> traduce el dominio (<code>github.com</code>) a una dirección IP; 2) tu navegador abre una conexión <b>TCP</b> y, si es HTTPS, negocia un cifrado <b>TLS</b>; 3) envía una petición <b>HTTP</b>; 4) el servidor responde con archivos (HTML, CSS, JS); 5) el navegador los <b>renderiza</b>. Todo esto ocurre, normalmente, en menos de un segundo.'},
+    {t:'table', head:['Etapa','Qué ocurre'], rows:[
+      ['<b>DNS</b>','Agenda telefónica de internet: convierte nombres de dominio en direcciones IP.'],
+      ['<b>TCP/TLS</b>','Canal confiable de datos; TLS lo cifra (la “S” de HTTPS).'],
+      ['<b>HTTP</b>','Protocolo de peticiones y respuestas: métodos GET/POST, códigos de estado (200 OK, 404…).'],
+      ['<b>Parseo HTML → DOM</b>','El navegador lee el HTML byte a byte y construye el árbol DOM.'],
+      ['<b>Parseo CSS → CSSOM</b>','Con el CSS construye el CSSOM (árbol de estilos).'],
+      ['<b>Render tree + Layout</b>','Une DOM+CSSOM, calcula tamaños y posiciones de cada caja.'],
+      ['<b>Paint + Composite</b>','Pinta píxeles por capas y las compone en pantalla.']
+    ]},
+    {t:'p', h:'El código JS se ejecuta por <b>motores</b>: <b>V8</b> (Chrome, Edge y Node.js), <b>SpiderMonkey</b> (Firefox) y <b>JavaScriptCore</b> (Safari). Usan compilación <b>JIT</b> (just-in-time): interpretan rápido y, mientras tanto, compilan a código de máquina las partes “calientes” que se ejecutan mucho.'},
+    {t:'code', lang:'txt', title:'una petición HTTP real, a mano', code:
+`GET /mi-lista-de-tareas/ HTTP/1.1
+Host: tu-usuario.github.io
+User-Agent: Mozilla/5.0 ...
+
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=utf-8
+Cache-Control: max-age=600
+
+<!DOCTYPE html>
+<html lang="es"> ...`},
+    {t:'info', title:'ℹ️ Por qué el service worker exige HTTPS', h:'Un SW intercepta TODO el tráfico de tu app. Si un atacante lo reemplazara en una conexión sin cifrar, controlararía la página. TLS es la garantía de que el SW que registraste es el que publicaste.'},
+    {t:'warn', title:'⚠️ Internet ≠ Web', h:'<b>Internet</b> es la red física y lógica (cables, routers, DNS, TCP/IP). La <b>web</b> es un servicio que corre sobre internet (documentos enlazados via HTTP). También corren sobre internet el correo (SMTP) o los videojuegos en línea.'},
+    {t:'info', title:'📚 Para profundizar', h:'Ilya Grigorik, <i>High Performance Browser Networking</i> (O’Reilly, 2013, gratuita en hpbn.co) · Jennifer Robbins, <i>Learning Web Design</i>, 6.ª ed. (O’Reilly, 2025), caps. 2–3 · MDN: <i>Populating the page: how browsers work</i>.'}
+  ]},
+  { n:2, emoji:'♿', short:'HTML y accesibilidad', title:'HTML semántico y accesibilidad profesional', time:'15 min', blocks:[
+    {t:'p', h:'El HTML semántico no es “buenas modales”: define el <b>esquema del documento</b> (outline) que usan buscadores, lectores de pantalla y las propias herramientas del navegador. Un buen documento se entiende por sus etiquetas aunque le quites TODO el CSS.'},
+    {t:'table', head:['Etiqueta','Significado','Uso típico'], rows:[
+      ['<code>&lt;header&gt;</code>','Encabezado de la página o de una sección','Logo + título + navegación'],
+      ['<code>&lt;nav&gt;</code>','Bloque de navegación principal','Menús'],
+      ['<code>&lt;main&gt;</code>','Contenido principal (único por página)','La app en sí'],
+      ['<code>&lt;section&gt;</code>','Sección temática con encabezado','Capítulos, bloques'],
+      ['<code>&lt;article&gt;</code>','Contenido autocontenido y reusable','Posts, tarjetas, comentarios'],
+      ['<code>&lt;aside&gt;</code>','Contenido tangencial','Barras laterales, notas'],
+      ['<code>&lt;footer&gt;</code>','Pie de página o sección','Créditos, enlaces legales']
+    ]},
+    {t:'p', h:'La accesibilidad se rige por las pautas <b>WCAG 2.2</b> del W3C (2023), cuyos principios se resumen en POUR: <b>P</b>ercebible, <b>O</b>perable, <b>C</b>omprensible (Understanding) y <b>R</b>obusto. Traducido al día a día: imágenes con <code>alt</code> descriptivo, formularios con <code>&lt;label&gt;</code>, contraste de color suficiente (mín. 4.5:1 para texto normal), que todo se opere con teclado (<code>Tab</code>, <code>Enter</code>) y con <code>:focus-visible</code> claro.'},
+    {t:'code', lang:'html', title:'formulario accesible de verdad', code:
+`<label for="entrada-tarea">Nueva tarea</label>
+<input type="text" id="entrada-tarea"
+       aria-describedby="ayuda-tarea"
+       autocomplete="off" required>
+<p id="ayuda-tarea" class="ayuda">
+  Maximo 100 caracteres. Presiona Enter para agregar.
+</p>
+
+<!-- El lector de pantalla anuncia: "Nueva tarea, edicion de
+     texto, Maximo 100 caracteres..." -->`},
+    {t:'warn', title:'⚠️ La regla número uno de ARIA', h:'<b>No uses ARIA si existe un elemento HTML nativo</b>. Un <code>&lt;button&gt;</code> ya recibe foco, responde a Enter/Espacio y se anuncia solo; un <code>&lt;div onclick&gt;</code> con <code>role="button"</code> y <code>tabindex</code> es una imitación con más esfuerzo y peor resultado. HTML primero, ARIA para rellenar huecos.'},
+    {t:'tip', title:'💡 Auditoría de 30 segundos', h:'1) Recorre tu página solo con Tab: ¿sabes siempre dónde estás? 2) Lighthouse (DevTools) → Accessibility: te da una puntuación y hallazgos concretos. 3) Prueba con zoom 200%: ¿sigue usable?'},
+    {t:'info', title:'📚 Para profundizar', h:'Jon Duckett, <i>HTML and CSS: Design and Build Websites</i> (Wiley, 2011) · Steve Krug, <i>Don’t Make Me Think</i>, 3.ª ed. (New Riders, 2014) · W3C Web Accessibility Initiative (w3.org/WAI) · MDN: <i>Accessibility</i>.'}
+  ]},
+  { n:3, emoji:'🧮', short:'CSS avanzado', title:'CSS en profundidad: cascada, especificidad y arquitectura', time:'18 min', blocks:[
+    {t:'p', h:'¿Por qué una regla gana sobre otra? Lo decide la <b>cascada</b> en este orden: 1) origen e importancia (¡<code>!important</code> gana casi todo — úsalo como último recurso!), 2) <b>especificidad</b> del selector, 3) orden de aparición (la última gana si hay empate). Por eso enlazamos Bootstrap ANTES que <code>styles.css</code>.'},
+    {t:'p', h:'La especificidad se calcula como una terna <b>(a, b, c)</b>: a = selectores de id, b = clases, atributos y pseudo-clases, c = elementos y pseudo-elementos. Se comparan de izquierda a derecha, como años-meses-días:'},
+    {t:'table', head:['Selector','Cálculo','Valor'], rows:[
+      ['<code>p</code>','(0, 0, 1)','muy bajo'],
+      ['<code>.tarea</code>','(0, 1, 0)','medio'],
+      ['<code>.tarea.completada</code>','(0, 2, 0)','medio-alto'],
+      ['<code>ul li span</code>','(0, 0, 3)','bajo'],
+      ['<code>#lista-tareas .tarea</code>','(1, 1, 0)','alto'],
+      ['<code>style="…"</code> (inline)','(1, 0, 0, 0)','ganador casi siempre'],
+      ['<code>!important</code>','supera todo lo anterior','último recurso']
+    ]},
+    {t:'code', lang:'css', title:'un caso real de la app, resuelto con aritmética', code:
+`/* Bootstrap dice: .list-group-item { background: #fff; }  (0,1,0) */
+
+/* Nuestro estilo debe GANAR: */
+.list-group-item.completada { background: #f8fafc; }  /* (0,2,0) ✓ */
+
+/* Si hubiese empate (0,1,0) ganaria Bootstrap por... orden:
+   el CDN va primero en el <head>, el nuestro despues. */`},
+    {t:'h', h:'Arquitectura: nombra tus clases como un pro'},
+    {t:'p', h:'Cuando el proyecto crece, el CSS “salvaje” se vuelve imposible de mantener. Dos escuelas: <b>BEM</b> (Bloque__Elemento—Modificador: <code>.tarea__texto--completada</code>) y las <b>utilidades</b> (lo que usa Bootstrap: <code>d-flex</code>, <code>mt-3</code>). Ambas buscan lo mismo: saber qué hace una clase sin leer el resto del archivo.'},
+    {t:'table', head:['Necesidad','Herramienta'], rows:[
+      ['Unidades que respetan al usuario','<code>rem</code> (relativa a la raíz) sobre <code>px</code> para texto'],
+      ['Espaciados y temas reutilizables','<code>--custom-properties</code> (variables CSS)'],
+      ['Cajas predecibles','<code>*, *::before, *::after { box-sizing: border-box; }</code>'],
+      ['Layout de una dimensión (filas/columnas)','Flexbox'],
+      ['Layout de dos dimensiones (rejilla completa)','CSS Grid']
+    ]},
+    {t:'info', title:'📚 Para profundizar', h:'Eric Meyer y Estelle Weyl, <i>CSS: The Definitive Guide</i> (O’Reilly; 5.ª ed. actualizada) · Adam Wathan y Steve Schoger, <i>Refactoring UI</i> (2018) · Jon Duckett, <i>HTML and CSS</i> (Wiley, 2011).'}
+  ]},
+  { n:4, emoji:'⚙️', short:'JavaScript profundo', title:'El motor de JavaScript: valores, closures y event loop', time:'20 min', blocks:[
+    {t:'h', h:'Valores vs referencias (el error #1 de principiantes)'},
+    {t:'p', h:'Los <b>primitivos</b> (string, number, boolean, null, undefined, symbol, bigint) se copian <b>por valor</b>. Los <b>objetos</b> (arrays, funciones, fechas, {}, []) se copian <b>por referencia</b>: la variable guarda la “dirección” del objeto, no el objeto.'},
+    {t:'code', lang:'js', title:'experimento que lo demuestra', code:
+`let a = 10;
+let b = a;         // se copia el VALOR
+b = 99;
+console.log(a);    // 10  (a sigue intacta)
+
+const lista1 = ['leche'];
+const lista2 = lista1;   // se copia la REFERENCIA
+lista2.push('pan');
+console.log(lista1);     // ['leche', 'pan']  ¡cambio ambas!
+
+// Copia real de un array (superficial):
+const copia = [...lista1];
+// Copia profunda (objetos anidados):
+const profunda = structuredClone(tareas);`},
+    {t:'h', h:'Closures: funciones que recuerdan su cuna'},
+    {t:'p', h:'Una función “recuerda” las variables del lugar donde nació, incluso cuando ese lugar ya terminó de ejecutarse. Eso es un <b>closure</b>. Es la razón por la que cada botón de borrar de nuestra app sabe cuál es SU <code>li</code>:'},
+    {t:'code', lang:'js', title:'closures en acción', code:
+`function crearContador() {
+  let cuenta = 0;               // vive solo aqui...
+  return function () {
+    cuenta = cuenta + 1;        // ...pero la interna la recuerda
+    return cuenta;
+  };
+}
+const misClics = crearContador();
+misClics();  // 1
+misClics();  // 2  <- cada closure tiene SU propia "cuenta"`},
+    {t:'h', h:'Clases, prototipos y los 4 pilares'},
+    {t:'p', h:'JavaScript es <b>orientado a objetos basado en prototipos</b>: la palabra <code>class</code> (ES6) es azúcar sintáctica sobre prototipos. Los cuatro fundamentos de la POO: <b>abstracción</b> (modelar lo esencial: una Tarea tiene texto y estado), <b>encapsulamiento</b> (datos + métodos juntos; campos privados con <code>#</code>), <b>herencia</b> (<code>extends</code>/<code>super</code>) y <b>polimorfismo</b> (mismo método, comportamientos distintos).'},
+    {t:'code', lang:'js', title:'nuestra Tarea como clase', code:
+`class Tarea {
+  #texto;                       // campo privado
+  constructor(texto) {
+    this.#texto = texto;
+    this.completada = false;
+  }
+  get texto() { return this.#texto; }
+  toggle() { this.completada = !this.completada; return this; }
+  toJSON() { return { texto: this.#texto, completada: this.completada }; }
+}
+
+const t = new Tarea('Estudiar closures');
+t.toggle();
+console.log(JSON.stringify(t));`},
+    {t:'h', h:'El event loop: por qué JS “hace una cosa a la vez”… y nunca se congela'},
+    {t:'p', h:'El motor tiene un <b>call stack</b> (pila de ejecución) de un solo hilo; las operaciones lentas (timers, red, clics) las gestionan las <b>Web APIs</b> del navegador; sus callbacks esperan en colas. El <b>event loop</b> solo vacía el stack, y entonces: primero TODA la cola de <b>microtasks</b> (promesas), luego una <b>task</b> (timers, eventos). ¿Por qué un bucle infinito congela la página? Porque el loop nunca queda libre para pintar.'},
+    {t:'code', lang:'js', title:'predice el orden antes de ejecutarlo', code:
+`console.log('1 - sincrono');
+setTimeout(() => console.log('4 - task (timer)'), 0);
+Promise.resolve().then(() => console.log('3 - microtask'));
+console.log('2 - sincrono');
+// Resultado: 1, 2, 3, 4`},
+    {t:'info', title:'📚 Para profundizar', h:'David Flanagan, <i>JavaScript: The Definitive Guide</i>, 7.ª ed. (O’Reilly, 2020) · Marijn Haverbeke, <i>Eloquent JavaScript</i>, 4.ª ed. (No Starch Press, 2024; gratuita en eloquentjavascript.net) · Kyle Simpson, <i>You Don’t Know JS Yet</i> (2.ª ed., abierta en GitHub) · Addy Osmani, <i>Learning JavaScript Design Patterns</i> (O’Reilly, gratuita online).'}
+  ]},
+  { n:5, emoji:'🧬', short:'DOM profesional', title:'El DOM y los eventos como un profesional', time:'15 min', blocks:[
+    {t:'p', h:'Más allá de <code>getElementById</code>, el DOM moderno ofrece una API elegante: <code>querySelector/querySelectorAll</code> (cualquier selector CSS), <code>closest(selector)</code> (el ancestro más cercano que coincida), <code>matches()</code>, <code>dataset</code> (atributos <code>data-*</code> como propiedades JS) y <code>DocumentFragment</code> para insertar muchos nodos en una sola operación de render.'},
+    {t:'h', h:'Delegación de eventos: un listener para gobernarlos a todos'},
+    {t:'p', h:'Nuestra v1 agregaba un listener por cada botón de borrar. Con <b>delegación</b>, escuchamos UNA vez en el <code>&lt;ul&gt;</code> y aprovechamos el <b>bubbling</b> (los eventos “burbujean” hacia arriba). Resultado: menos memoria, y los <code>&lt;li&gt;</code> creados después ya funcionan solos:'},
+    {t:'code', lang:'js', title:'delegación con closest()', code:
+`lista.addEventListener('click', function (evento) {
+  const botonBorrar = evento.target.closest('.boton-borrar');
+  if (botonBorrar) {
+    botonBorrar.closest('.tarea').remove();
+    return;
+  }
+  const texto = evento.target.closest('.texto-tarea');
+  if (texto) {
+    texto.closest('.tarea').classList.toggle('completada');
+  }
+});
+// Nota: ya no necesitas listeners dentro de crearTarea()`},
+    {t:'table', head:['Concepto','Idea clave'], rows:[
+      ['<b>Capturing → Target → Bubbling</b>','El evento baja del documento al objetivo y vuelve a subir. addEventListener escucha por defecto en bubbling.'],
+      ['<code>evento.target</code>','Dónde originate el clic (puede ser un hijo).'],
+      ['<code>evento.currentTarget</code>','Dónde está colgado el listener (el ul).'],
+      ['<code>stopPropagation()</code>','Frena el burbujeo (usar con moderación).'],
+      ['<code>data-*</code> + <code>dataset</code>','<code>data-id="7"</code> se lee como <code>el.dataset.id</code>: metadatos en el HTML.']
+    ]},
+    {t:'warn', title:'⚠️ Seguridad: innerHTML + datos del usuario = XSS', h:'Si haces <code>li.innerHTML = entrada.value</code> y el usuario escribe <code>&lt;img src=x onerror="robarCookies()"&gt;</code>, está ejecutando código dentro de tu página: es un ataque <b>XSS</b> (Cross-Site Scripting), el más común de la web. Regla: para texto de usuarios, SIEMPRE <code>textContent</code>. Si alguna vez necesitas innerHTML, sanea el contenido con una librería como DOMPurify.'},
+    {t:'info', title:'📚 Para profundizar', h:'MDN Web Docs: <i>Introduction to events</i> y <i>Document Object Model</i> · Jon Duckett, <i>JavaScript & jQuery</i> (Wiley, 2014), caps. 5–6 · web.dev: <i>Deep dive into X…</i> series.'}
+  ]},
+  { n:6, emoji:'🗄️', short:'Persistencia y PWA', title:'Persistencia y PWA: arquitectura offline-first', time:'18 min', blocks:[
+    {t:'table', head:['Almacenamiento','Capacidad','Datos','Cuándo usarlo'], rows:[
+      ['<b>Cookies</b>','~4 KB','texto','Lo que el servidor necesita leer (sesiones). Se envían en CADA petición.'],
+      ['<b>localStorage</b>','~5 MB','texto (strings)','Preferencias y colecciones pequeñas. Síncrono y persistente.'],
+      ['<b>sessionStorage</b>','~5 MB','texto','Igual que localStorage, pero muere al cerrar la pestaña.'],
+      ['<b>IndexedDB</b>','cientos de MB','objetos completos','Bases de datos reales en el cliente (asíncrono, con índices).'],
+      ['<b>Cache API</b>','grande','respuestas HTTP','El caché del service worker: HTML/CSS/JS/imágenes.']
+    ]},
+    {t:'warn', title:'⚠️ Límites prácticos de localStorage', h:'Es <b>síncrono</b> (bloquea el hilo si abusa de él), solo strings, sin expiración, y puede estar bloqueado (modo incógnito/visores) → por eso <code>try/catch</code> al leer. Para catálogos grandes o archivos, el camino profesional es <b>IndexedDB</b> (o su capa de azúcar, la librería idb).'},
+    {t:'h', h:'Estrategias de caché del service worker'},
+    {t:'table', head:['Estrategia','Cómo decide','Ideal para'], rows:[
+      ['<b>Cache-first</b>','Caché primero; red solo si no existe','CSS, JS, fuentes, imágenes versionadas'],
+      ['<b>Network-first</b>','Red primero; caché como respaldo offline','HTML (así el usuario ve lo último si hay internet)'],
+      ['<b>Stale-while-revalidate</b>','Responde del caché YA, y de paso actualiza el caché con la red','Recursos que cambian poco']
+    ]},
+    {t:'code', lang:'js', title:'network-first para el HTML (mejora de nuestro sw.js)', code:
+`self.addEventListener('fetch', function (evento) {
+  if (evento.request.mode === 'navigate') {
+    // HTML: intenta red; si no hay, sirve el cache
+    evento.respondWith(
+      fetch(evento.request)
+        .then(function (respuesta) {
+          return caches.open(CACHE_NAME).then(function (cache) {
+            cache.put(evento.request, respuesta.clone());
+            return respuesta;
+          });
+        })
+        .catch(function () {
+          return caches.match('index.html');
+        })
+    );
+  }
+});`},
+    {t:'p', h:'El ciclo de vida completo del SW: <b>installing</b> (cachea) → <b>installed/waiting</b> (espera a que cierres las pestañas viejas) → <b>activating</b> (limpia cachés antiguas) → <b>activated</b> (atiende fetch). Con <code>self.skipWaiting()</code> + <code>clients.claim()</code> la nueva versión toma el control de inmediato — útil, pero hazlo conscientemente para no “cortar” sesiones en vivo.'},
+    {t:'info', title:'📚 Para profundizar', h:'Tal Ater, <i>Progressive Web Apps</i> (O’Reilly, 2017) · web.dev/learn/pwa (Google, gratuito y actualizado) · MDN: <i>Service Worker API</i>.'}
+  ]},
+  { n:7, emoji:'🌳', short:'Git y DevOps', title:'Git por dentro y despliegue continuo', time:'15 min', blocks:[
+    {t:'p', h:'Git no guarda “diferencias”: guarda <b>objetos inmutables</b> identificados por el hash <b>SHA-1</b> de su contenido. Tres tipos: <b>blob</b> (el contenido de un archivo), <b>tree</b> (directorios que apuntan a blobs) y <b>commit</b> (una fotografía: apunta a un tree, al commit padre, al autor, al mensaje). Una <b>rama</b> es solo un puntero móvil de 41 bytes al último commit, y <code>HEAD</code> apunta a la rama “actual”. Por eso crear ramas en Git es instantáneo.'},
+    {t:'code', lang:'txt', title:'las tres áreas de trabajo', code:
+`  carpeta            staging           repositorio
+ (working)           (index)           (historial)
+
+ editas  ------>  git add .  ------>  git commit -m "..."
+                 "que entrara en     "fotografia con
+                  la foto?"           mensaje"   ---> git push`},
+    {t:'h', h:'GitHub Flow: el flujo profesional más simple'},
+    {t:'steps', items:[
+      '<code>main</code> siempre está <b>desplegable</b> (y protegida: nadie hace push directo en equipos).',
+      'Para cualquier cambio creas una rama: <code>git switch -c mejora-boton-borrar</code>.',
+      'Commits pequeños con mensajes descriptivos, push de la rama.',
+      '<b>Pull Request</b>: revisión de código, comentarios y CI (tests automáticos).',
+      'Merge a main → el deploy a producción se dispara solo (GitHub Pages o Render).'
+    ]},
+    {t:'p', h:'A ese automatismo se le llama <b>CI/CD</b>: <i>Continuous Integration</i> (cada push se verifica con pruebas) y <i>Continuous Deployment</i> (lo aprobado llega a producción sin pasos manuales). Render ejecuta el CD por ti: escucha el push, hace build, invalida el CDN y publica. Si algo sale mal, puedes hacer <b>rollback</b> al despliegue anterior desde su dashboard, y <code>git revert</code> en tu historial.'},
+    {t:'warn', title:'⚠️ Nunca escribas secretos en el repo', h:'API keys y contraseñas en el código quedan en el historial PARA SIEMPRE (aunque borres el archivo). Los secretos viven en variables de entorno (en Render: Environment → Environment Variables) y el archivo <code>.gitignore</code> los excluye desde el día uno.'},
+    {t:'info', title:'📚 Para profundizar', h:'Scott Chacon y Ben Straub, <i>Pro Git</i>, 2.ª ed. (Apress, 2014; gratuita en git-scm.com/book) · docs.github.com: <i>GitHub flow</i> · render.com/docs.'}
+  ]},
+  { n:8, emoji:'🏷️', short:'HTML en detalle', title:'HTML en detalle: head, formularios y atributos', time:'20 min', blocks:[
+    {t:'p', h:'Todo documento HTML bien nacido tiene la misma estructura: <code>&lt;!DOCTYPE html&gt;</code> anuncia la versión; <code>&lt;html lang="es"&gt;</code> declara el idioma (los lectores de pantalla lo usan para pronunciar bien); dentro, el <code>&lt;head&gt;</code> contiene metadatos invisibles y el <code>&lt;body&gt;</code> el contenido visible. En el head nunca faltan: <code>&lt;meta charset="UTF-8"&gt;</code> (acentos y emojis), <code>&lt;meta name="viewport" ...&gt;</code> (móviles), <code>&lt;title&gt;</code> (la pestaña y el SEO) y la <code>&lt;meta name="description"&gt;</code> que muestran los buscadores bajo tu título.'},
+    {t:'code', lang:'html', title:'plantilla base que puedes copiar siempre', code:`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi lista de tareas</title>
+  <meta name="description" content="Organiza tu día">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer><\/script>
+</head>
+<body>
+  <!-- tu contenido -->
+</body>
+</html>`},
+    {t:'table', head:['Atributo global','Para qué sirve'], rows:[
+      ['<b>id</b>','Identificador ÚNICO. Uno por documento. Ideal para getElementById.'],
+      ['<b>class</b>','Etiqueta(s) de estilo: varias por elemento, reutilizables. CSS y querySelectorAll viven de aquí.'],
+      ['<b>title</b>','Texto emergente al pasar el ratón (tooltip nativo).'],
+      ['<b>data-*</b>','Datos propios: <code>data-id="7"</code> se lee con <code>el.dataset.id</code>. Así sabe el juego qué carta tocaste.'],
+      ['<b>hidden</b>','Oculta el elemento sin CSS.'],
+      ['<b>contenteditable</b>','Permite editar el texto directamente en el navegador.']
+    ]},
+    {t:'p', h:'<b>Rutas relativas vs absolutas.</b> Una ruta absoluta empieza por <code>https://</code> (o <code>/</code> desde la raíz del sitio). Una relativa se interpreta desde el archivo actual: <code>styles.css</code> busca junto a tu HTML; <code>./img/foto.png</code> entra a la carpeta img; <code>../img/foto.png</code> SUBE un nivel primero. Los enlaces internos a secciones usan anclas: <code>&lt;a href="#contacto"&gt;</code> salta al elemento con <code>id="contacto"</code>. Si tu página carga en Render o GitHub Pages y las imágenes no salen, el 90% de las veces es una ruta mal escrita (mayúsculas incluidas: en el servidor, <code>Foto.PNG</code> ≠ <code>foto.png</code>).'},
+    {t:'table', head:['Tipo de input','Qué obtienes'], rows:[
+      ['<b>text</b>','Texto libre de una línea. El más común.'],
+      ['<b>password</b>','Puntos en lugar de caracteres (no cifra nada: solo tapa).'],
+      ['<b>email / url / tel</b>','Teclado adaptado en móvil + validación automática del formato.'],
+      ['<b>number</b>','Flechitas de incremento; acepta min, max y step.'],
+      ['<b>date / time</b>','Selector de fecha/hora nativo del navegador.'],
+      ['<b>checkbox</b>','Sí/No independiente (la casilla “completada” de tus tareas).'],
+      ['<b>radio</b>','Una sola opción entre varias: agrupa por el MISMO name.'],
+      ['<b>range</b>','Deslizador entre min y max.'],
+      ['<b>file</b>','Selector de archivos del sistema.']
+    ]},
+    {t:'code', lang:'html', title:'formulario accesible con validación nativa', code:`<form id="nueva-tarea">
+  <label for="titulo">Título de la tarea</label>
+  <input id="titulo" type="text" required
+         minlength="3" maxlength="60"
+         placeholder="Ej. Comprar leche">
+
+  <label for="prioridad">Prioridad</label>
+  <select id="prioridad">
+    <option value="alta">Alta</option>
+    <option value="media" selected>Media</option>
+    <option value="baja">Baja</option>
+  </select>
+
+  <fieldset>
+    <legend>Recordatorio</legend>
+    <input type="radio" name="rec" value="si" id="rec-si">
+    <label for="rec-si">Sí</label>
+    <input type="radio" name="rec" value="no" id="rec-no" checked>
+    <label for="rec-no">No</label>
+  </fieldset>
+
+  <button type="submit">Agregar</button>
+</form>`},
+    {t:'p', h:'<b>Validación nativa.</b> Con <code>required</code>, <code>minlength</code>, <code>maxlength</code>, <code>min</code>, <code>max</code>, <code>step</code> y <code>pattern</code> (expresión regular) el navegador valida ANTES de enviar y muestra mensajes en el idioma del usuario, sin una línea de JS. Las pseudoclases <code>:valid</code> / <code>:invalid</code> / <code>:focus</code> te permiten pintar el borde verde o rojo solo con CSS. Para campos libres, <code>&lt;textarea&gt;</code> acepta varias líneas. Cada input con etiqueta debe tener un <code>&lt;label for="mismo-id"&gt;</code>: al hacer clic en la etiqueta se enfoca el campo y los lectores de pantalla anuncian qué deben escribir.'},
+    {t:'list', items:[
+      '<b>Un solo h1</b> por página; jerarquía h1→h2→h3 sin saltos.',
+      'Toda <code>img</code> con <b>alt</b> descriptivo (vacío solo si es puramente decorativa).',
+      'Formularios: label siempre; agrupa opciones con fieldset/legend.',
+      'Usa la etiqueta semántica antes que div: nav, main, section, article, aside, footer.',
+      'Botones para acciones, enlaces para navegar: un a sin href no es clicable con teclado.',
+      'Prueba tu página navegando SOLO con Tab: si te pierdes, algo falta.'
+    ]},
+    {t:'info', title:'ℹ️ Entidades HTML', h:'Algunos caracteres están reservados: para mostrarlos se escriben entidades. Las básicas: <code>&amp;lt;</code> muestra &lt;, <code>&amp;gt;</code> muestra &gt;, <code>&amp;amp;</code> muestra &amp;, <code>&amp;quot;</code> muestra comillas. Con <code>charset="UTF-8"</code> los acentos españoles y los emojis van directos, sin entidades.'},
+    {t:'warn', title:'⚠️ Errores típicos de principiante', h:'IDs duplicados (el JS solo encuentra el primero) · anidar un formulario dentro de otro (comportamiento indefinido) · usar <code>&lt;br&gt;</code> repetidos para “dar espacio” (eso es CSS: margin/padding) · olvidar cerrar comillas o etiquetas (el navegador “adivina” y a veces adivina mal) · escribir atributos inventados (<code>misdatos="x"</code> en vez de <code>data-misdatos="x"</code>).'}
+  ]},
+  { n:9, emoji:'🎨', short:'CSS en detalle', title:'CSS en detalle: caja, unidades, flexbox y responsive', time:'25 min', blocks:[
+    {t:'p', h:'El <b>modelo de caja</b> es la regla de oro: cada elemento es una caja con contenido, <b>padding</b> (relleno interior), <b>border</b> (borde) y <b>margin</b> (espacio EXTERIOR que lo separa de los demás). El tamaño total por defecto es contenido + padding + border, lo que arruina los cálculos. Por eso casi todo proyecto moderno empieza con <code>* { box-sizing: border-box; }</code>: el ancho declarado ya incluye padding y borde, y las cuentas vuelven a ser humanas.'},
+    {t:'code', lang:'css', title:'la misma caja, dos interpretaciones', code:`/* box-sizing por defecto (content-box) */
+.caja { width: 200px; padding: 20px; border: 5px solid #333; }
+/* ancho real: 200 + 40 + 10 = 250px  😱 */
+
+/* con border-box */
+* { box-sizing: border-box; }
+.caja { width: 200px; padding: 20px; border: 5px solid #333; }
+/* ancho real: 200px (el contenido se ajusta) ✅ */`},
+    {t:'table', head:['Unidad','Significa','Úsala para'], rows:[
+      ['<b>px</b>','Píxeles fijos','Bordes, sombras, detalles de 1-2 px.'],
+      ['<b>%</b>','Porcentaje del contenedor','Anchuras fluidas.'],
+      ['<b>em</b>','Multiplica el tamaño de fuente HEREDADO','Padding de botones que escalan con su texto.'],
+      ['<b>rem</b>','Multiplica la fuente de la RAÍZ (html)','Tipografía y espaciados consistentes en todo el sitio.'],
+      ['<b>vw / vh</b>','1% del ancho/alto de la ventana','Héroes de pantalla completa, overlays.'],
+      ['<b>clamp(min, ideal, max)</b>','Valor fluido con límites','Títulos que crecen sin romperse: <code>font-size: clamp(1.5rem, 4vw, 3rem)</code>.']
+    ]},
+    {t:'p', h:'<b>display</b> decide cómo se comportan las cajas: <code>block</code> ocupa todo el ancho (div, p, h1); <code>inline</code> fluye dentro del texto y NO acepta width/height vertical (span, a, strong); <code>inline-block</code> fluye pero acepta dimensiones; <code>none</code> desaparece del layout; <code>flex</code> y <code>grid</code> convierten al elemento en contenedor de layout moderno. <b>position</b> mueve cajas fuera del flujo: <code>relative</code> (desplazable, y referencia para hijos absolute), <code>absolute</code> (se ancla al ancestro posicionado más cercano), <code>fixed</code> (fijo a la ventana: el overlay de login de este curso), <code>sticky</code> (se pega al hacer scroll: la barra superior y el sidebar del campus).'},
+    {t:'p', h:'<b>Flexbox en una pantalla.</b> Al contenedor le das <code>display:flex</code> y controlas: <code>flex-direction</code> (row/column), <code>justify-content</code> (eje principal), <code>align-items</code> (eje cruzado), <code>gap</code> (separación sin margins), <code>flex-wrap</code> (permite saltos de línea). A cada hijo: <code>flex:1</code> (reparte espacio por igual), <code>flex:none</code> (NO me encojas, vital para botones que no deben achatarse — el botón de usuario del campus lo usa), <code>align-self</code> (excepción individual).'},
+    {t:'table', head:['Valor','justify-content (horizontal)','align-items (vertical)'], rows:[
+      ['<b>flex-start</b>','Al inicio','Arriba'],
+      ['<b>center</b>','Centrado','Centrado'],
+      ['<b>flex-end</b>','Al final','Abajo'],
+      ['<b>space-between</b>','Distribuido, extremos pegados','—'],
+      ['<b>space-around / evenly</b>','Distribuido con aire simétrico','—'],
+      ['<b>stretch</b>','—','Estira a la altura del contenedor (por defecto)']
+    ]},
+    {t:'p', h:'<b>Responsive y mobile-first.</b> Escribe primero el diseño de móvil (es el más simple) y luego añade <code>@media (min-width: 768px) { ... }</code> para tabletas y escritorio. Este curso lo hace dos veces: el sidebar vive fuera de pantalla (<code>transform: translateX(-100%)</code>) y entra con la clase <code>.open</code> bajo 900 px; el grid de lecciones pasa de una columna a varias con una sola media query. Los breakpoints de Bootstrap (sm 576, md 768, lg 992, xl 1200) son la referencia de facto de la industria.'},
+    {t:'code', lang:'css', title:'variables CSS: tu propia paleta', code:`:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --line: #334155;
+  --accent: #38bdf8;
+  --radius: 14px;
+}
+.tarjeta {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+/* modo claro en dos líneas */
+body.tema-claro { --bg: #f8fafc; --card: #ffffff; --line: #e2e8f0; }`},
+    {t:'p', h:'<b>Movimiento.</b> <code>transition: propiedad duración curva</code> suaviza cambios de estado (hover, clases toggled). <code>transform</code> mueve/rota/escala SIN recalcular el layout (por eso es barato: el flip 3D de las cartas del curso 2 es <code>transform: rotateY(180deg)</code>). Las animaciones <code>@keyframes</code> permiten secuencias (el pulso del botón de grabar). Respeta <code>@media (prefers-reduced-motion: reduce)</code>: quien pide menos movimiento al sistema agradece menos vértigo.'},
+    {t:'p', h:'<b>Especificidad:</b> cuando dos reglas pelean por el mismo elemento gana la más específica, en este orden: estilo inline (style="...") &gt; <b>id</b> (#menu) &gt; <b>clase/atributo/pseudoclase</b> (.boton, :hover) &gt; <b>etiqueta</b> (button). A igual especificidad, gana la última declarada. <code>!important</code> salta la fila (útil una vez cada luna, adictivo y peligroso siempre: pelear contra un !important ajeno es el círculo 9 del CSS).'},
+    {t:'tip', title:'💡 Depura CSS como profesional', h:'Abre DevTools (F12), clic derecho sobre el elemento → Inspeccionar: verás el modelo de caja pintado con sus medidas reales, las reglas aplicadas en orden de especificidad (las tachadas perdieron) y puedes editar valores EN VIVO antes de copiarlos a tu archivo. El botón de “dispositivo móvil” simula anchos de teléfono sin tener uno.'}
+  ]},
+  { n:10, emoji:'🧠', short:'JavaScript esencial', title:'JavaScript esencial: del var al DOM', time:'25 min', blocks:[
+    {t:'p', h:'<b>Variables:</b> <code>const</code> para lo que no se reasigna (tu opción por defecto), <code>let</code> para lo que cambia (contadores, acumuladores). Ambas viven en el <b>bloque</b> donde nacen <code>{ }</code>. El viejo <code>var</code> vive en la función completa (hoisting) y provoca bugs sutiles: evítalo. Nombres: usa camelCase descriptivo — <code>tareasPendientes</code> cuenta la historia; <code>tp</code> no.'},
+    {t:'table', head:['Tipo','Ejemplo','typeof devuelve'], rows:[
+      ['<b>string</b>','"Hola 👋"','"string"'],
+      ['<b>number</b>','42, 3.14, -7 (no hay enteros separados)','"number"'],
+      ['<b>boolean</b>','true / false','"boolean"'],
+      ['<b>undefined</b>','variable declarada sin valor','"undefined"'],
+      ['<b>null</b>','“vacío” intencional','"object" (bug histórico, no lo olvides)'],
+      ['<b>object / array</b>','{...}, [...]','"object"'],
+      ['<b>function</b>','() =&gt; {}','"function"'],
+      ['<b>symbol / bigint</b>','casos especiales','"symbol" / "bigint"']
+    ]},
+    {t:'p', h:'<b>Condicionales y lógica:</b> <code>if / else if / else</code>, y el operador ternario <code>cond ? a : b</code> para elecciones cortas. Los operadores <code>&amp;&amp;</code> y <code>||</code> hacen <b>cortocircuito</b>: <code>a &amp;&amp; b()</code> solo ejecuta b si a es verdadero; <code>nombre || "Invitado"</code> da valor por defecto. Para null/undefined específicamente existe <code>??</code>: <code>guardadas ?? []</code> respeta un 0 o un false legítimos, cosa que <code>||</code> se saltaría. Y <code>?.</code> navega sin miedo: <code>estado.srs?.[id]</code> da undefined en vez de lanzar error si srs no existe.'},
+    {t:'code', lang:'js', title:'bucles que usarás todos los días', code:`const tareas = ["estudiar", "correr", "leer"];
+
+for (let i = 0; i < tareas.length; i++) {
+  console.log(i + 1 + ". " + tareas[i]);     // clásico con índice
+}
+
+for (const t of tareas) {                     // for...of: cada elemento
+  console.log(t);
+}
+
+tareas.forEach(function(t, i) {               // método con callback
+  console.log((i + 1) + ". " + t);
+});
+
+let n = 3;
+while (n > 0) { console.log(n); n--; }        // mientras la condición dure`},
+    {t:'p', h:'<b>Funciones:</b> declaración (<code>function saludar() {}</code>, tiene hoisting), expresión (<code>const f = function() {}</code>) y flecha (<code>const f = (a, b) =&gt; a + b</code>, retorno implícito en una línea). Parámetros por defecto: <code>function crear(titulo, done = false) {}</code>. Las funciones devuelven UN valor con <code>return</code>; si no lo pones, devuelven undefined — el olvido de return número uno es en los map.'},
+    {t:'table', head:['Método de array','Qué hace','Devuelve'], rows:[
+      ['<b>push / pop</b>','agrega / quita al FINAL','nueva longitud / el elemento'],
+      ['<b>unshift / shift</b>','agrega / quita al INICIO','nueva longitud / el elemento'],
+      ['<b>slice(a, b)</b>','copia el tramo a…b-1','array NUEVO (no muta)'],
+      ['<b>splice(i, n, ...)</b>','quita n en i e inserta; elimina tareas','array con lo quitado (SÍ muta)'],
+      ['<b>includes / indexOf</b>','¿contiene X? / ¿en qué posición?','boolean / número (-1 si no está)'],
+      ['<b>map(fn)</b>','transforma cada elemento','array nuevo'],
+      ['<b>filter(fn)</b>','deja los que cumplen','array nuevo'],
+      ['<b>find(fn)</b>','el primero que cumple','elemento o undefined'],
+      ['<b>some / every(fn)</b>','¿alguno? / ¿todos cumplen?','boolean'],
+      ['<b>join(sep)</b>','une a texto','string']
+    ]},
+    {t:'p', h:'<b>Objetos:</b> agrupan datos por nombre: <code>const tarea = { id: 3, titulo: "Leer", done: false };</code>. Accedes con punto (<code>tarea.done</code>) o corchetes (<code>tarea["done"]</code> — obligatorio si la clave viene en una variable). <code>Object.keys(t)</code>, <code>Object.values(t)</code> y <code>Object.entries(t)</code> los convierten en arrays para recorrerlos. Los objetos se copian por <b>referencia</b>: <code>const b = a;</code> no copia, apunta — para duplicar: <code>{...a}</code> (superficial) o <code>structuredClone(a)</code> (profunda).'},
+    {t:'code', lang:'js', title:'template literals: textos con variables dentro', code:`const nombre = "Luis";
+const pendientes = 4;
+
+const resumen = \`Hola \${nombre}, te quedan \${pendientes} tareas\${pendientes === 1 ? "" : "s"}.
+Completaste el \${Math.round((10 - pendientes) / 10 * 100)}% del día.\`;
+
+console.log(resumen);
+// Hola Luis, te quedan 4 tareas.
+// Completaste el 60% del día.
+// Usa backticks, no comillas: admite varias líneas y \${expresiones}`},
+    {t:'p', h:'<b>DOM — leer y escribir la página:</b> <code>document.getElementById("lista")</code> por id; <code>document.querySelector(".tarea.done")</code> el primero que case con un selector CSS; <code>querySelectorAll(...)</code> todos (NodeList con forEach). Crear: <code>const li = document.createElement("li"); li.textContent = "texto seguro"; li.classList.add("done"); li.dataset.id = "7"; lista.appendChild(li);</code>. Borrar: <code>el.remove()</code>. Cambiar HTML con cuidado: <code>innerHTML</code> interpreta etiquetas (riesgo XSS con texto de usuario); <code>textContent</code> escribe texto plano seguro.'},
+    {t:'p', h:'<b>Eventos y delegación:</b> <code>el.addEventListener("click", fn)</code>. Dentro del handler, <code>event.target</code> es el nodo exacto tocado; <code>event.preventDefault()</code> cancela el comportamiento por defecto (el submit recargador). La técnica profesional es <b>delegación</b>: un solo listener en el CONTENEDOR (la ul de tareas) que decide según <code>event.target.closest("button")</code>. Funciona con elementos creados después, ahorra memoria y es exactamente lo que hace el campus: un click global que despacha por <code>data-action</code>.'},
+    {t:'code', lang:'js', title:'try/catch: el patrón del curso para localStorage', code:`function cargarTareas() {
+  try {
+    const raw = localStorage.getItem("mis-tareas");
+    const datos = JSON.parse(raw);        // lanza si el texto está roto
+    return Array.isArray(datos) ? datos : [];
+  } catch (e) {
+    console.warn("Datos corruptos, empiezo de cero:", e.message);
+    return [];                            // la app NUNCA muere por esto
+  }
+}`},
+    {t:'warn', title:'⚠️ Los 5 tropiezos clásicos', h:'1) <code>=</code> asigna, <code>===</code> compara (un if (x = 5) siempre verdadero). 2) map espera un return por rama. 3) <code>document.querySelector</code> devuelve null si no existe → null.addEventListener revienta: verifica o usa ?.. 4) JSON.parse de undefined lanza: siempre try/catch. 5) comparar dos arrays con === compara referencias, nunca contenido.'}
+  ]},
+  { n:11, emoji:'🅱️', short:'Bootstrap a fondo', title:'Bootstrap a fondo: grid, utilidades y componentes', time:'20 min', blocks:[
+    {t:'p', h:'<b>Bootstrap 5</b> es el framework CSS más usado del mundo: te da un sistema de rejilla, componentes listos (navbar, cards, modales) y cientos de utilidades de una clase. La versión 5 eliminó jQuery y funciona con atributos <code>data-bs-*</code>. Se usa desde CDN (un &lt;link&gt; y un &lt;script&gt;) o instalándolo; para aprender, el CSS completo con la consola abierta es oro: cada componente está documentado en getbootstrap.com con ejemplos copiables.'},
+    {t:'p', h:'<b>Contenedores y rejilla.</b> Todo vive en <code>.container</code> (ancho máximo por breakpoint, centrado) o <code>.container-fluid</code> (ancho total). Dentro: <code>.row</code> crea una fila de 12 columnas virtuales, y <code>.col-*</code> reparte. El truco responsivo: <code>col-12 col-md-6 col-lg-4</code> significa “12 de 12 (toda la fila) en móvil, mitad en tablet ≥768px, tercio en escritorio ≥992px”. Las filas tienen gutter (margen negativo + padding de columnas) para alinear perfecto.'},
+    {t:'table', head:['Breakpoint','Desde','Sufijo de clase','Dispositivo típico'], rows:[
+      ['(base, sin sufijo)','0 px','col-','teléfono vertical'],
+      ['<b>sm</b>','≥ 576 px','col-sm-','teléfono horizontal'],
+      ['<b>md</b>','≥ 768 px','col-md-','tableta'],
+      ['<b>lg</b>','≥ 992 px','col-lg-','portátil'],
+      ['<b>xl</b>','≥ 1200 px','col-xl-','escritorio'],
+      ['<b>xxl</b>','≥ 1400 px','col-xxl-','pantalla grande']
+    ]},
+    {t:'code', lang:'html', title:'un panel responsivo real', code:`<div class="container">
+  <div class="row g-3">                    <!-- g-3 = gap entre columnas -->
+    <div class="col-12 col-md-6 col-lg-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Tarea</h5>
+          <p class="card-text text-muted">Descripción…</p>
+          <button class="btn btn-primary btn-sm">Completar</button>
+        </div>
+      </div>
+    </div>
+    <!-- más columnas: en móvil apilan, en escritorio 3 por fila -->
+  </div>
+</div>`},
+    {t:'table', head:['Familia de utilidades','Clases y ejemplo'], rows:[
+      ['<b>Espaciado</b>','m*/p* + lado (t b s e x y) + escala 0-5: <code>mt-3 mb-0 px-4 py-2 mx-auto</code>'],
+      ['<b>Texto</b>','<code>text-center text-end text-muted fw-bold fs-5 lh-lg text-uppercase</code>'],
+      ['<b>Color</b>','tema: <code>primary secondary success danger warning info</code> → <code>bg-primary text-white</code>'],
+      ['<b>Flex</b>','<code>d-flex align-items-center justify-content-between flex-wrap gap-2</code>'],
+      ['<b>Display y tamaño</b>','<code>d-none d-md-block w-100 h-50 shadow rounded-3</code>'],
+      ['<b>Bordes</b>','<code>border-0 rounded-pill border-top</code>']
+    ]},
+    {t:'p', h:'<b>Componentes que usarás:</b> <code>navbar navbar-expand-lg</code> con <code>navbar-toggler</code> (el botón hamburguesa automático en móvil); <code>card</code> (card-body, card-title, card-footer) el contenedor universal; botones <code>btn btn-primary/-success/-danger/-outline-primary/-sm/-lg</code>; formularios <code>form-control form-label form-select form-check form-switch</code>; avisos <code>alert alert-success/-danger alert-dismissible</code>; etiquetas <code>badge bg-secondary</code>; tablas <code>table table-striped table-hover</code>; spinner <code>spinner-border spinner-grow</code>.'},
+    {t:'p', h:'<b>Modal sin JS propio:</b> un botón con <code>data-bs-toggle="modal" data-bs-target="#miModal"</code> y el bloque <code>.modal fade</code> con su <code>.modal-dialog .modal-content</code> (header, body, footer). Bootstrap escucha los clicks y gestiona el fondo oscuro y el cierre con Escape. Lo mismo con <code>data-bs-toggle="tooltip"</code>, <code>collapse</code> (menús) y <code>offcanvas</code> (sidebars como el de este campus).'},
+    {t:'list', items:[
+      'Usa utilidades ANTES de escribir CSS propio: tu hoja queda pequeña y predecible.',
+      'No pelees con el framework: sobreescribir medios botón con !important termina en té con ácido.',
+      'Personaliza por variables o compilando Sass, no editando bootstrap.css.',
+      'h-100 en las cards de una row las iguala de alto.',
+      'mx-auto centra bloques con ancho limitado; text-center centra su contenido.'
+    ]},
+    {t:'info', title:'ℹ️ ¿Bootstrap o CSS propio?', h:'Bootstrap para prototipar rápido, apps internas, paneles y cuando tu fuerte no es el diseño. CSS propio (o utilitarias como Tailwind) cuando necesitas identidad visual única. Nada te impide mezclar: este campus usa su propio CSS con ideas prestadas del sistema de utilidades de Bootstrap.'}
+  ]},
+  { n:12, emoji:'💾', short:'localStorage profundo', title:'localStorage en profundidad: persistencia profesional', time:'20 min', blocks:[
+    {t:'p', h:'<b>localStorage</b> es un pequeño almacén persistente que el navegador asocia a tu <b>origen</b> (protocolo + dominio + puerto). Sobrevive recargas, cierres de pestaña y reinicios del equipo; solo se borra al limpiar datos del sitio o con <code>clear()</code>. Es síncrono (bloquea hasta terminar), de solo strings, y su cuota ronda los <b>5 MB por origen</b> — suficiente para años de tareas, no para imágenes.'},
+    {t:'table', head:['Método','Qué hace','Ejemplo'], rows:[
+      ['<b>setItem(k, v)</b>','crea o sobrescribe','<code>setItem("modo", "oscuro")</code>'],
+      ['<b>getItem(k)</b>','lee (string o null)','<code>getItem("modo")</code>'],
+      ['<b>removeItem(k)</b>','borra una clave','<code>removeItem("modo")</code>'],
+      ['<b>clear()</b>','borra TODAS las del origen','usar con miedo'],
+      ['<b>key(i) / length</b>','lista claves guardadas','inventarios y depuración']
+    ]},
+    {t:'p', h:'<b>La regla número uno:</b> localStorage solo guarda STRINGS. Un número se guarda bien (“42”), un boolean se vuelve “true”, pero un objeto se vuelve “[object Object]” — datos destruidos sin error alguno. Serializa SIEMPRE estructuras con <code>JSON.stringify</code> antes de guardar y parsea con <code>JSON.parse</code> (dentro de try/catch) al leer. JSON no soporta funciones, undefined, Date (se vuelve string ISO) ni referencias circulares: tu modelo de datos debe ser texto-compatible.'},
+    {t:'code', lang:'js', title:'el patrón completo del curso', code:`const CLAVE = "mis-tareas-v1";
+
+function guardar(tareas) {
+  try {
+    localStorage.setItem(CLAVE, JSON.stringify(tareas));
+  } catch (e) {
+    if (e.name === "QuotaExceededError") {
+      alert("Almacenamiento lleno: elimina tareas antiguas.");
+    } else { console.error(e); }
+  }
+}
+
+function cargar() {
+  try {
+    const datos = JSON.parse(localStorage.getItem(CLAVE));
+    return Array.isArray(datos) ? datos : [];
+  } catch (e) { return []; }   // null o texto corrupto → vacío sano
+}`},
+    {t:'p', h:'<b>Sincronizar pestañas:</b> el evento <code>storage</code> se dispara en las DEMÁS pestañas del mismo origen cuando una escribe. Con <code>window.addEventListener("storage", e =&gt; { if (e.key === CLAVE) pintar(JSON.parse(e.newValue)); })</code> tu lista se actualiza sola en la segunda pestaña — efecto “magia” que no requiere servidor. <b>sessionStorage</b> es idéntico pero muere al cerrar la pestaña: ideal para borradores.'},
+    {t:'table', head:['Tecnología','Capacidad','Vida','Caso ideal'], rows:[
+      ['<b>Cookie</b>','~4 KB, viaja al servidor en cada petición','configurable','sesión de login (httpOnly), consentimiento'],
+      ['<b>localStorage</b>','~5 MB, solo local','para siempre','preferencias, progreso, borradores'],
+      ['<b>sessionStorage</b>','~5 MB, solo local','hasta cerrar pestaña','estado de un formulario, filtros temporales'],
+      ['<b>IndexedDB</b>','cientos de MB, asíncrona, indexada','para siempre','miles de registros, archivos, offline serio']
+    ]},
+    {t:'list', items:[
+      'NUNCA guardes contraseñas, PIN ni tokens: cualquier JS de la página puede leerlo (y cualquier extensión maliciosa).',
+      'Cuenta con que el usuario borre datos: tu app debe funcionar en frío sin quejarse.',
+      'Versiona tus claves (mis-tareas-v1): cuando cambies el formato, migras en lugar de romper.',
+      'Guarda poco y normalizado: guardar el estado derivado (contadores) produce datos viejos mentirosos.',
+      'Todo acceso envuelto en try/catch: navegadores en modo privado pueden bloquearlo por completo.'
+    ]},
+    {t:'p', h:'<b>Versionado de esquema — cómo lo hace este campus:</b> el progreso vive en <code>codecamp-db-v2</code> con estructura { users, session }; la v1 vieja se conserva y se migra si existe. Cuando quieras cambiar el formato de tus tareas, lee la clave vieja, transforma, escribe en la clave nueva y mantén la vieja como respaldo una temporada. Así ningún usuario pierde datos al actualizarse.'},
+    {t:'info', title:'📚 Para profundizar', h:'MDN: <i>Web Storage API</i> y <i>IndexedDB API</i> · “Working with quota and eviction” en web.dev · El capítulo de almacenamiento de <i>Eloquent JavaScript</i> (Haverbeke) para ver la persistencia integrada con módulos.'}
+  ]},
+  { n:13, emoji:'🚀', short:'Git y despliegue', title:'Git, GitHub y despliegue: guía de campo', time:'25 min', blocks:[
+    {t:'p', h:'<b>Git</b> guarda SNAPSHOTS completos de tu proyecto (no diferencias) identificados por un hash SHA único. Cada archivo tuyo pasa por tres estados: <b>working directory</b> (tu carpeta), <b>staging area</b> (lo preparado con add) y el <b>repositorio</b> (lo confirmado con commit). La staging area parece trámite y es superpoder: puedes commitear dos archivos hoy y el tercero mañana, con mensajes limpios por cambio.'},
+    {t:'table', head:['Comando','Qué hace'], rows:[
+      ['<b>git init</b>','convierte la carpeta en repositorio (crea .git/)'],
+      ['<b>git status</b>','qué cambió, qué está en staging — tu GPS'],
+      ['<b>git add archivo / .</b>','prepara cambios para el commit'],
+      ['<b>git commit -m "mensaje"</b>','fotografía el staging con un mensaje'],
+      ['<b>git log --oneline</b>','historial compacto de commits'],
+      ['<b>git diff</b>','cambios aún sin staging; <code>git diff --staged</code> los ya preparados'],
+      ['<b>git restore archivo</b>','deshace cambios SIN commitear (¡borra trabajo!)']
+    ]},
+    {t:'p', h:'<b>Ramas:</b> una rama es solo un puntero móvil a un commit — ramificar es barato. <code>git switch -c feature/filtros</code> crea y cambia; trabajas aislado; <code>git switch main</code> + <code>git merge feature/filtros</code> integra. Si ambas ramas tocaron las mismas líneas, Git para y te deja un <b>conflicto</b> marcado en el archivo:'},
+    {t:'code', lang:'txt', title:'conflicto: tú decides qué queda', code:`<<<<<<< HEAD
+const MAX = 10;          // lo que hay en main
+=======
+const MAX_TAREAS = 20;   // lo que traía tu rama
+>>>>>>> feature/limites
+
+// 1) Edita dejando SOLO la versión correcta (o una mezcla)
+// 2) Borra los marcadores <<<<<<<, =======, >>>>>>> 3) git add + git commit`},
+    {t:'table', head:['Remoto','Qué hace'], rows:[
+      ['<b>git clone URL</b>','descarga el repo completo + su historial'],
+      ['<b>git remote add origin URL</b>','conecta tu repo local con GitHub'],
+      ['<b>git push -u origin main</b>','sube commits (el -u recuerda el destino)'],
+      ['<b>git pull</b>','baja e integra lo que otros subieron'],
+      ['<b>git fetch</b>','baja sin integrar: revisa antes de mezclar']
+    ]},
+    {t:'p', h:'<b>.gitignore</b> excluye archivos del repositorio: <code>node_modules/</code> (pesa toneladas y se reinstala con npm install), <code>.env</code> (CLAVES Y SECRETOS — jamás a GitHub), <code>dist/</code>, <code>.DS_Store</code>, logs. Ojo: si un secreto ya fue commiteado, borrarlo después NO lo quita del historial — rota la credencial. Y un <b>README.md</b> decente decide si alguien usa tu proyecto: qué es, captura, cómo correrlo local, estructura de archivos, y cómo desplegarlo.'},
+    {t:'steps', items:[
+      '<b>GitHub Pages:</b> sube tu repo a GitHub → Settings → Pages → Source: main branch, root → tu index.html vive en https://usuario.github.io/repo/ en ~1 minuto.',
+      'Añade un archivo vacío <code>.nojekyll</code> si usas carpetas con guion bajo.',
+      'Verifica rutas relativas (./styles.css): en un subdirectorio las absolutas rompen.',
+      '<b>Render Static Site:</b> New + → Static Site → conecta tu repo de GitHub.',
+      'Build command: (vacío) · Publish directory: <code>.</code> · Render detecta cambios y redespliega solo (auto-deploy).',
+      'HTTPS y dominio incluidos; puedes atar tu propio dominio en Settings → Custom Domains.'
+    ]},
+    {t:'list', items:[
+      '<b>Mensajes de commit</b> en imperativo y específicos: “Agrega filtro de tareas completadas”, no “cambios”.',
+      'Commit pequeño = revert pequeño. Si no sabes cómo describir el cambio, quizá mezclaste tres.',
+      'Conventional commits: feat:, fix:, docs:, style:, refactor:, test:, chore:. Tu historial se vuelve una bitácora legible.',
+      'Antes de empezar a trabajar: git pull. Después de terminar: commit + push. Rutina que evita 90% de dolores.',
+      'main debe estar SIEMPRE desplegable: experimentos a rama.'
+    ]},
+    {t:'warn', title:'⚠️ Los tres sustos clásicos', h:'1) Commitéaste un secreto → el historial lo recuerda: rota la clave YA. 2) “git push rejected” → alguien subió antes que tú: git pull, resuelve, push. 3) Borrate un archivo sin commitear → git restore lo resucita del último commit; si estaba commiteado, git checkout <sha> -- archivo lo trae de vuelta. Git casi nunca pierde trabajo: casi siempre es que aún no lo commiteaste.'},
+    {t:'milestone', title:'🎓 Siguiente nivel', h:'Cuando domines el flujo diario, aprende <code>git rebase</code> (historial lineal), <code>git stash</code> (aparcar cambios a medias), <code>git bisect</code> (cazar el commit que rompió algo) y Pull Requests con revisión: el lenguaje profesional de cualquier equipo de desarrollo.'}
+  ]},
+  { n:14, emoji:'📚', short:'Bibliografía', title:'Bibliografía y recursos recomendados', time:'10 min', blocks:[
+    {t:'p', h:'Este libro de texto se apoya en obras reales de referencia en el desarrollo web. Si quieres seguir formándote (o citar fuentes en un trabajo escolar), este es el canon, con un orden sugerido de lectura para ti:'},
+    {t:'table', head:['Obra','Autor(es) · Editorial · Año','Ideal para…'], rows:[
+      ['<i>Learning Web Design</i>, 6.ª ed.','Jennifer Robbins · O’Reilly · 2025','El mejor “libro de texto” general: HTML, CSS y JS desde cero, con ejercicios.'],
+      ['<i>HTML and CSS: Design and Build Websites</i>','Jon Duckett · Wiley · 2011','El más visual: casi una revista; perfecto como primera lectura.'],
+      ['<i>CSS: The Definitive Guide</i>','Eric A. Meyer y Estelle Weyl · O’Reilly','La referencia técnica completa de CSS (cascada, layout, todo).'],
+      ['<i>Refactoring UI</i>','Adam Wathan y Steve Schoger · 2018','Que tus interfaces se vean profesionales sin ser diseñador.'],
+      ['<i>JavaScript & jQuery</i>','Jon Duckett · Wiley · 2014','JS y DOM explicados con ilustraciones; puente ideal tras este curso.'],
+      ['<i>Eloquent JavaScript</i>, 4.ª ed.','Marijn Haverbeke · No Starch Press · 2024','El libro de JS más recomendado para pensar como programador (gratis online).'],
+      ['<i>JavaScript: The Definitive Guide</i>, 7.ª ed.','David Flanagan · O’Reilly · 2020','La “biblia” de referencia del lenguaje.'],
+      ['<i>You Don’t Know JS Yet</i>, 2.ª ed.','Kyle Simpson · O’Reilly/GitHub · 2020+','Serie profunda (y gratuita) sobre closures, this, prototipos…'],
+      ['<i>Learning JavaScript Design Patterns</i>, 2.ª ed.','Addy Osmani · O’Reilly','Patrones de diseño en JS (gratis online).'],
+      ['<i>Progressive Web Apps</i>','Tal Ater · O’Reilly · 2017','El libro clásico de service workers y experiencia offline.'],
+      ['<i>Pro Git</i>, 2.ª ed.','Scott Chacon y Ben Straub · Apress · 2014','Git a fondo; oficial y gratuita en git-scm.com.'],
+      ['<i>Don’t Make Me Think</i>, 3.ª ed.','Steve Krug · New Riders · 2014','Usabilidad: cómo pensar como el usuario.']
+    ]},
+    {t:'h', h:'Recursos gratuitos en línea (fuentes primarias)'},
+    {t:'list', items:[
+      '<b>MDN Web Docs</b> (developer.mozilla.org) — la enciclopedia oficial de la web, mantenida por Mozilla. Tu primera consulta siempre.',
+      '<b>web.dev</b> (Google) — cursos modernos de rendimiento, PWA y CSS.',
+      '<b>W3C WAI</b> (w3.org/WAI) — pautas oficiales de accesibilidad (WCAG 2.2).',
+      '<b>eloquentjavascript.net</b> — Eloquent JS completo, interactivo y gratis.',
+      '<b>git-scm.com/book</b> — Pro Git completo en español y gratis.'
+    ]},
+    {t:'tip', title:'💡 Cómo leer literatura técnica en inglés', h:'Casi todo lo anterior está en inglés. No necesitas dominarlo: con vocabulario técnico básico (deploy, framework, callback…) + el traductor del navegador basta. Empieza por MDN en inglés con la extensión de traducción: aprenderás el idioma Y la tecnología a la vez.'},
+    {t:'milestone', title:'🎓 Cómo seguir tu camino', h:'Siguiente parada natural: <b>profundizar JavaScript</b> (arrays, objetos, clases y sus 4 fundamentos) construyendo un juego, y luego <b>inglés técnico/B1</b> con flashcards y exámenes. Los libros de esta bibliografía son los mapas: tú eliges la ruta.'}
+  ]}
+];
+
+/* ============================ PROYECTO FINAL: ARCHIVOS ============================ *//* ============================ PROYECTO FINAL: ARCHIVOS ============================ */
 const FINAL_FILES = [
   { name:'index.html', lang:'html', code:
 `<!DOCTYPE html>
@@ -2384,17 +3030,152 @@ let LS_OK = true;
 try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); } catch(e){ LS_OK = false; }
 const safeStore = {
   get: function(k){ if(LS_OK){ try{ return localStorage.getItem(k); }catch(e){} } return (k in MEM ? MEM[k] : null); },
-  set: function(k,v){ if(LS_OK){ try{ localStorage.setItem(k,v); return; }catch(e){} } MEM[k]=v; }
+  set: function(k,v){ if(LS_OK){ try{ localStorage.setItem(k,v); return; }catch(e){} } MEM[k]=v; },
+  remove: function(k){ if(LS_OK){ try{ localStorage.removeItem(k); }catch(e){} } delete MEM[k]; }
 };
-const STATE_KEY = 'codecamp-lista-tareas-v1';
-let state = { scores:{}, examScore:null, name:'', lastLesson:'1-1' };
-function loadState(){
-  try{
-    const raw = safeStore.get(STATE_KEY);
-    if(raw){ const s = JSON.parse(raw); state = Object.assign({scores:{},examScore:null,name:'',lastLesson:'1-1'}, s); }
-  }catch(e){}
+const LEGACY_KEY = 'codecamp-lista-tareas-v1';
+const DB_KEY = 'codecamp-db-v2';
+let DB = { users:{}, session:null };
+let AUTH_MODE = 'login';
+function blankData(){ return { scores:{}, examScore:null, name:'', lastLesson:'1-1' }; }
+function hashPin(s){
+  let h = 5381;
+  const t = String(s);
+  for(let i=0;i<t.length;i++){ h = ((h<<5) + h + t.charCodeAt(i)) >>> 0; }
+  return 'h' + h.toString(36) + '-' + t.length;
 }
-function saveState(){ safeStore.set(STATE_KEY, JSON.stringify(state)); }
+function loadDB(){
+  try{ const raw = safeStore.get(DB_KEY); if(raw){ const d = JSON.parse(raw); if(d && d.users) DB = d; } }catch(e){}
+  if(!DB.users) DB.users = {};
+  if(!('session' in DB)) DB.session = null;
+}
+function saveDB(){ safeStore.set(DB_KEY, JSON.stringify(DB)); }
+/* ---------- migración de progreso pre-cuentas (versiones viejas) ----------
+   Las versiones anteriores guardaban el progreso SIN cuentas en claves sueltas.
+   Al crear cuenta, iniciar sesión o entrar como invitado, ese progreso "huérfano"
+   se hereda UNA sola vez al campo correcto de la cuenta — y solo si el campo está
+   vacío, para no pisar nunca progreso más nuevo. Las claves viejas NO se borran
+   (quedan como respaldo). */
+const LEGACY_ALL = { data:'codecamp-lista-tareas-v1', dataJs:'codecamp-js-v1', dataEn:'codecamp-en-v1' };
+function legacyData(key){
+  try{
+    const raw = safeStore.get(key);
+    if(raw){ const o = JSON.parse(raw); if(o && ((o.scores && Object.keys(o.scores).length) || o.examScore != null)) return o; }
+  }catch(e){}
+  return null;
+}
+function cursoVacio(d){ return !d || !((d.scores && Object.keys(d.scores).length) || d.examScore != null); }
+function migrarHuerfanos(){
+  const u = sessionUser();
+  if(!u || !DB.users[u]) return;
+  const rec = DB.users[u];
+  let movido = false;
+  if(cursoVacio(rec.data)){   const o = legacyData(LEGACY_ALL.data);   if(o){ rec.data   = Object.assign(rec.data || {}, o); movido = true; } }
+  if(cursoVacio(rec.dataJs)){ const o = legacyData(LEGACY_ALL.dataJs); if(o){ rec.dataJs = o; movido = true; } }
+  if(cursoVacio(rec.dataEn)){ const o = legacyData(LEGACY_ALL.dataEn); if(o){ rec.dataEn = Object.assign(blankData(), o); movido = true; } }
+  if(movido){ saveDB(); try{ console.info('[migración] progreso de versiones anteriores heredado a la cuenta «' + u + '»'); }catch(e){} }
+}
+function sessionUser(){ return (DB.session && DB.users[DB.session]) ? DB.session : null; }
+let state = blankData();   // estado del curso (declarado: evita ReferenceError)
+function loadState(){
+  let base = blankData();
+  const u = sessionUser();
+  if(u){ base = Object.assign(base, DB.users[u].data || {}); }
+  else{
+    try{ const raw = safeStore.get(LEGACY_KEY); if(raw){ base = Object.assign(base, JSON.parse(raw)); } }catch(e){}
+  }
+  state = base;
+}
+function saveState(){
+  const u = sessionUser();
+  if(u){ DB.users[u].data = state; saveDB(); }
+  else{ safeStore.set(LEGACY_KEY, JSON.stringify(state)); }
+}
+/* ---------- pantalla de acceso ---------- */
+function authCardHtml(mode, msg, vals){
+  vals = vals || {};
+  const isLogin = mode === 'login';
+  const users = Object.keys(DB.users).filter(function(k){ return !DB.users[k].hidden; });
+  return '<div class="auth-wrap"><div class="auth-card">'+
+    '<div class="auth-head"><div class="auth-logo">📝</div><h1>CodeCamp</h1>'+
+    '<p>Curso interactivo · Lista de Tareas con HTML, CSS y JS</p></div>'+
+    '<div class="auth-tabs">'+
+    '<button type="button" class="auth-tab'+(isLogin?' active':'')+'" data-mode="login">'+t('auth_login')+'</button>'+
+    '<button type="button" class="auth-tab'+(isLogin?'':' active')+'" data-mode="create">'+t('auth_create')+'</button></div>'+
+    '<form class="auth-body" id="authForm">'+
+    (isLogin
+      ? '<div class="auth-field"><label>'+t('auth_user')+'</label><input id="authUser" autocomplete="username" required value="'+esc(vals.u||'')+'" list="lista-cuentas">'+
+        (users.length ? '<datalist id="lista-cuentas">'+users.map(function(x){ return '<option value="'+esc(x)+'">'; }).join('')+'</datalist>' : '')+'</div>'+
+        '<div class="auth-field"><label>'+t('auth_pin')+'</label><input id="authPin" type="password" autocomplete="current-password" required></div>'
+      : '<div class="auth-field"><label>'+t('auth_name')+'</label><input id="newName" maxlength="40" required value="'+esc(vals.name||'')+'"></div>'+
+        '<div class="auth-field"><label>'+t('auth_user')+'</label><input id="newUser" autocomplete="username" required value="'+esc(vals.u||'')+'"></div>'+
+        '<div class="auth-field"><label>'+t('auth_pin2')+'</label><input id="newPin" type="password" minlength="4" autocomplete="new-password" required></div>'
+    )+
+    (users.length ? '<p class="auth-users">'+t('auth_accounts')+users.map(esc).join(', ')+'</p>' : '')+
+    '<div class="auth-msg'+(msg?' show '+(msg.ok?'ok':'err'):'')+'">'+(msg?esc(msg.text):'')+'</div>'+
+    '<button class="btn" type="submit">'+(isLogin?'🔓 '+t('auth_login'):'✨ '+t('auth_create'))+'</button>'+
+    '</form>'+
+    '<div class="auth-actions"><div class="auth-div"><span>o</span></div>'+
+    '<button class="btn ghost" data-mode="guest">'+t('auth_guest')+'</button></div>'+
+    '<p class="auth-note">'+t('auth_note')+'</p>'+
+    '<button type="button" class="auth-reset" data-rec="wipe-course">'+t('auth_reset')+'</button>'+
+    '</div></div>';
+}
+function showAuth(msg, vals){
+  const layer = document.getElementById('authLayer');
+  if(!layer) return;
+  layer.innerHTML = authCardHtml(AUTH_MODE, msg, vals);
+  layer.classList.add('show');
+  document.body.classList.add('no-scroll');
+  $$('.auth-tab', layer).forEach(function(b){
+    b.addEventListener('click', function(){ AUTH_MODE = b.getAttribute('data-mode'); showAuth(); });
+  });
+  const guest = $('[data-mode="guest"]', layer);
+  if(guest) guest.addEventListener('click', doGuest);
+  const form = $('#authForm', layer);
+  form.addEventListener('submit', function(e){ e.preventDefault(); if(AUTH_MODE==='login'){ doLogin(); } else { doCreate(); } });
+}
+function hideAuth(){
+  const layer = document.getElementById('authLayer');
+  if(layer){ layer.classList.remove('show'); layer.innerHTML=''; }
+  document.body.classList.remove('no-scroll');
+}
+function doLogin(){
+  const uEl = $('#authUser'), pEl = $('#authPin');
+  const u = (uEl && uEl.value || '').trim().toLowerCase();
+  const p = (pEl && pEl.value) || '';
+  const rec = DB.users[u];
+  if(!rec || rec.hidden){ return showAuth({ text:'Ese usuario no existe en este dispositivo. ¿Quieres crear una cuenta?', ok:false }, { u:u }); }
+  if(rec.pin !== hashPin(p)){ return showAuth({ text:'PIN incorrecto. Vuelve a intentar.', ok:false }, { u:u }); }
+  DB.session = u; migrarHuerfanos(); saveDB(); loadState(); hideAuth(); render();
+}
+function doCreate(){
+  const nameEl = $('#newName'), uEl = $('#newUser'), pEl = $('#newPin');
+  const name = (nameEl && nameEl.value || '').trim();
+  const u = (uEl && uEl.value || '').trim().toLowerCase();
+  const p = (pEl && pEl.value) || '';
+  if(!name || !u){ return showAuth({ text:'Completa tu nombre y el usuario.', ok:false }, { u:u, name:name }); }
+  if(u === '__guest'){ return showAuth({ text:'Ese nombre de usuario está reservado.', ok:false }, { u:'', name:name }); }
+  if(DB.users[u] && !DB.users[u].hidden){ return showAuth({ text:'Ese usuario ya existe en este dispositivo. Elige otro.', ok:false }, { u:'', name:name }); }
+  if(p.length < 4){ return showAuth({ text:'El PIN necesita al menos 4 caracteres.', ok:false }, { u:u, name:name }); }
+  DB.users[u] = { name:name, pin:hashPin(p), hidden:false, created:Date.now(), data:blankData() };
+  DB.session = u; migrarHuerfanos(); saveDB(); loadState(); hideAuth(); render();
+}
+function doGuest(){
+  if(!DB.users['__guest']){ DB.users['__guest'] = { name:'Invitado', pin:'', hidden:true, created:Date.now(), data:blankData() }; }
+  DB.session = '__guest'; migrarHuerfanos(); saveDB(); loadState(); hideAuth(); render();
+}
+function doLogout(){
+  DB.session = null; saveDB(); state = blankData(); AUTH_MODE = 'login';
+  showAuth(); updateChrome();
+}
+function updateUserChip(){
+  const chip = document.getElementById('topUser');
+  if(!chip) return;
+  const u = sessionUser();
+  if(u){ chip.style.display = ''; chip.textContent = '👤 ' + (DB.users[u].name || u) + ' ⏻'; }
+  else{ chip.style.display = 'none'; chip.textContent = ''; }
+}
 
 /* ---------- registro de lecciones y calificación global ---------- */
 const ALL_LESSONS = [];
@@ -2450,6 +3231,7 @@ function hlTag(t){
   });
 }
 function highlight(src, lang){
+  if(lang === 'txt' || lang === 'bash'){ return esc(src); }
   MARKS = [];
   let s = esc(src);
   if(lang === 'html'){
@@ -2475,7 +3257,7 @@ function highlight(src, lang){
 
 /* ---------- bloques de código con copiar ---------- */
 const CODE_STORE = [];
-const LANG_LABEL = { html:'HTML', css:'CSS', js:'JavaScript', txt:'TEXTO' };
+const LANG_LABEL = { html:'HTML', css:'CSS', js:'JavaScript', txt:'TEXTO', bash:'TERMINAL' };
 function codeBlockHtml(b){
   const idx = CODE_STORE.push(b.code) - 1;
   return '<div class="codewrap"><div class="codehead"><span class="dots"><i></i><i></i><i></i></span><span class="langtag">'+(LANG_LABEL[b.lang]||'CÓDIGO')+(b.title?' · '+esc(b.title):'')+'</span>'+
@@ -2861,7 +3643,10 @@ function viewHome(){
     '<div class="hero-ctas">'+
     (nextId ? '<button class="btn" data-nav="lesson" data-id="'+nextId+'">▶ '+(done>0?'Continuar':'Comenzar')+' el curso</button>'
             : '<button class="btn" data-nav="report">🎓 Ver mi boleta final</button>')+
+    '<button class="btn ghost" data-nav="book">📘 '+t('sb_book')+'</button>'+
     '<button class="btn ghost" data-nav="project">📦 Ver el proyecto final</button>'+
+    '<a class="btn ghost" href="javascript.html">🎮 Curso 2: JavaScript + Juego de Memoria</a>'+
+    '<a class="btn ghost" href="ingles.html">🇬🇧 Curso 3: Inglés B1</a>'+
     '</div>'+
     '<div class="hero-stats">'+
     '<span class="stat"><b>'+MODULES.length+'</b>módulos</span>'+
@@ -2878,8 +3663,9 @@ function viewHome(){
     '<h2 class="home-sec">🧭 ¿Cómo funciona?</h2>'+
     boxHtml('info','📖 Lecciones explicadas','Cada lección explica conceptos con analogías, muestra ejemplos de código reales (con botón de copiar) y te advierte de los errores típicos.')+
     boxHtml('tip','🧪 Practica en vivo','Los editores integrados ejecutan tu código al instante en el panel derecho. Modifícalo todo lo que quieras: es tu laboratorio seguro.')+
-    boxHtml('milestone','🏅 Calificaciones automáticas','Cada lección termina con un quiz o un ejercicio calificado (puntos por pregunta ✓). Tu mejor intento se guarda y alimenta tu calificación global (0–100), visible arriba y en la <b>Boleta de calificaciones</b>. Con el Examen Final (10 preguntas) puedes graduarte.')+
+    boxHtml('milestone','🏅 Calificaciones automáticas','Cada lección termina con un quiz o un ejercicio calificado (puntos por pregunta ✓). Tu mejor intento se guarda y alimenta tu calificación global (0–100), visible arriba y en la <b>Boleta de calificaciones</b>. Con el Examen Final (30 preguntas, 300 pts) puedes graduarte.')+
     boxHtml('warn','💾 Tu progreso se guarda solo','El curso usa localStorage: tu avance persiste al recargar. Si la vista previa integrada lo bloquea, descarga el archivo y ábrelo en tu navegador.')+
+    boxHtml('tip','🎮 ¿Ya terminaste?','Continúa con el <a href="javascript.html">Curso 2: JavaScript y el Juego de Memoria</a> — arrays, objetos, clases y los 4 pilares de la POO construyendo un juego completo. Mismas cuentas: tu usuario y PIN funcionan en ambos cursos.')+
     '</div>';
 }
 
@@ -2912,7 +3698,7 @@ function viewExam(){
   EDITOR_CODES = [];
   return '<div class="view">'+
     '<div class="exam-head"><h1>📝 Examen Final</h1>'+
-    '<p>10 preguntas de TODO el curso (Módulos 1–6). Cada pregunta vale 10 puntos. Necesitas <b>70/100</b> para graduarte. Puedes presentarlo las veces que quieras: se guarda tu mejor nota. ¡Mucha suerte! 🍀</p></div>'+
+    '<p>30 preguntas de TODO el curso (Módulos 1–6). Cada pregunta vale 10 puntos: <b>300 en total</b>. Se aprueba con <b>210/300 (70%)</b>. Puedes presentarlo las veces que quieras: se guarda tu mejor nota. ¡Mucha suerte! 🍀</p></div>'+
     '<section class="quiz" data-quiz="__exam">'+
     EXAM.questions.map(function(q,i){ return qHtml(q,i); }).join('')+
     '<div class="quiz-actions"><button type="button" class="btn" data-action="grade-exam">🏁 Calificar examen</button>'+
@@ -3021,6 +3807,29 @@ git push -u origin main`})+
     '<button class="btn" data-nav="report">📄 Ver mi boleta →</button></div>'+
     '</div>';
 }
+function viewBook(chapId){
+  EDITOR_CODES = [];
+  let n = parseInt(chapId, 10);
+  if(isNaN(n) || n < 1) n = 1;
+  if(n > TEXTBOOK.length) n = TEXTBOOK.length;
+  const ch = TEXTBOOK[n-1];
+  const pills = '<div class="book-pills">'+TEXTBOOK.map(function(c,i){
+    return '<button type="button" class="bpill'+(i+1===n?' active':'')+'" data-nav="book" data-id="'+(i+1)+'">'+c.emoji+' '+c.short+'</button>';
+  }).join('')+'</div>';
+  let blocksHtml = '';
+  ch.blocks.forEach(function(b){ blocksHtml += blockHtml(b, null); });
+  return '<div class="view">'+
+    '<div class="lesson-head">'+
+    '<span class="lmodule">📘 Libro de texto · lectura complementaria</span>'+
+    '<h1 class="ltitle">'+ch.title+'</h1>'+
+    '<div class="lmeta">Capítulo '+n+' de '+TEXTBOOK.length+' · ⏱ '+ch.time+' de lectura · sin calificación · profundiza con rigor técnico lo visto en las lecciones</div></div>'+
+    pills + blocksHtml +
+    '<div class="navbtns">'+
+    (n>1 ? '<button class="btn ghost" data-nav="book" data-id="'+(n-1)+'">← '+TEXTBOOK[n-2].short+'</button>' : '<span></span>')+
+    (n<TEXTBOOK.length ? '<button class="btn" data-nav="book" data-id="'+(n+1)+'">'+TEXTBOOK[n].short+' →</button>'
+                       : '<button class="btn" data-nav="home">🏠 Volver al curso →</button>')+
+    '</div></div>';
+}
 function renderProjectTab(i){
   const f = FINAL_FILES[i];
   $('#tabfile').innerHTML = codeBlockHtml({ lang:f.lang, title:f.name, code:f.code });
@@ -3030,7 +3839,7 @@ function renderProjectTab(i){
 function renderSidebar(route){
   const side = $('#sidebar');
   let gi = 0;
-  let h = '<div style="padding:2px 4px 10px"><button class="sextra" data-nav="home">🏠 Inicio del curso</button></div>';
+  let h = '<div style="padding:2px 4px 10px"><button class="sextra" data-nav="home">🏠 '+t('sb_home')+'</button></div>';
   MODULES.forEach(function(m){
     const containsCurrent = route.view === 'lesson' && route.id && m.lessons.some(function(l){ return l.id === route.id; });
     const open = containsCurrent || (route.view === 'home' && m.id === 'm1') || (route.view !== 'lesson' && route.view !== 'home' && m.id === 'm6');
@@ -3048,9 +3857,10 @@ function renderSidebar(route){
     h += '</div></div>';
   });
   h += '<div style="height:6px"></div>';
-  h += '<button class="sextra" data-nav="exam">📝 Examen final'+(state.examScore != null ? '<span class="sscore" style="margin-left:auto">'+state.examScore+'/'+EXAM_MAX+'</span>' : '')+'</button>';
-  h += '<button class="sextra" data-nav="project">📦 Proyecto final (código)</button>';
-  h += '<button class="sextra" data-nav="report">📄 Boleta de calificaciones</button>';
+  h += '<button class="sextra" data-nav="exam">📝 '+t('sb_exam')+(state.examScore != null ? '<span class="sscore" style="margin-left:auto">'+state.examScore+'/'+EXAM_MAX+'</span>' : '')+'</button>';
+  h += '<button class="sextra" data-nav="book">📘 '+t('sb_book')+'</button>';
+  h += '<button class="sextra" data-nav="project">📦 '+t('sb_project')+'</button>';
+  h += '<button class="sextra" data-nav="report">📄 '+t('sb_report')+'</button>';
   side.innerHTML = h;
 }
 
@@ -3059,13 +3869,14 @@ function updateChrome(){
   const pct = gradePct();
   const hasPoints = pointsEarned() > 0;
   $('#topBar').style.width = pct + '%';
-  $('#topPct').textContent = pct + '% del curso';
+  $('#topPct').textContent = pct + t('pct_course');
   const chip = $('#topGrade');
-  if(!hasPoints){ chip.textContent = 'Calificación: —'; chip.className = 'chip grade'; }
+  if(!hasPoints){ chip.textContent = t('grade_none'); chip.className = 'chip grade'; }
   else{
-    chip.textContent = 'Calificación: ' + pct + '/100';
+    chip.textContent = t('grade_label') + pct + '/100';
     chip.className = 'chip grade ' + (pct >= 70 ? 'g-good' : pct >= 50 ? 'g-mid' : 'g-bad');
   }
+  updateUserChip();
 }
 
 /* ---------- router ---------- */
@@ -3078,6 +3889,7 @@ function parseHash(){
     if(parts[0] === 'leccion' && LESSONS_BY_ID[parts[1]]) return { view:'lesson', id: parts[1] };
     if(parts[0] === 'examen') return { view:'exam' };
     if(parts[0] === 'proyecto') return { view:'project' };
+    if(parts[0] === 'libro') return { view:'book', id: parts[1] || null };
     if(parts[0] === 'boleta') return { view:'report' };
     return { view:'home' };
   }catch(e){ return { view:'home' }; }
@@ -3086,6 +3898,7 @@ function routeHash(r){
   if(r.view === 'lesson' && r.id) return '#/leccion/' + r.id;
   if(r.view === 'exam') return '#/examen';
   if(r.view === 'project') return '#/proyecto';
+  if(r.view === 'book') return r.id ? '#/libro/' + r.id : '#/libro';
   if(r.view === 'report') return '#/boleta';
   return '#/';
 }
@@ -3109,6 +3922,7 @@ function render(){
   else if(route.view === 'lesson') content.innerHTML = viewLesson(route.id);
   else if(route.view === 'exam') content.innerHTML = viewExam();
   else if(route.view === 'project'){ content.innerHTML = viewProject(); renderProjectTab(0); }
+  else if(route.view === 'book'){ content.innerHTML = viewBook(route.id); }
   else content.innerHTML = viewReport();
   initDemos(content);
   renderSidebar(route);
@@ -3144,8 +3958,25 @@ function fallbackCopy(text, btn, done){
   }catch(e){ done(false); }
 }
 
+/* ---------- protección de errores en el acceso ---------- */
+function safeAuth(fn){
+  return function(){
+    try{ return fn.apply(null, arguments); }
+    catch(err){
+      try{ showAuth({ text:'⚠️ Ocurrió un error inesperado: ' + String((err && err.message) || err) + '. Usa las opciones de recuperación.', ok:false }); }catch(e){}
+      try{ fatal(err); }catch(e2){}
+    }
+  };
+}
+doLogin = safeAuth(doLogin);
+doCreate = safeAuth(doCreate);
+doGuest = safeAuth(doGuest);
+doLogout = safeAuth(doLogout);
+
 document.addEventListener('click', function(e){
   const t = e.target;
+  const recBtn = t.closest ? t.closest('[data-rec]') : null;
+  if(recBtn){ handleRecovery(recBtn.getAttribute('data-rec')); return; }
   /* opciones de quiz */
   const opt = t.closest ? t.closest('.opt:not(.locked)') : null;
   if(opt){
@@ -3200,6 +4031,9 @@ document.addEventListener('click', function(e){
     render();
   } else if(action === 'print-cert'){
     try{ window.print(); }catch(e){ alertFallback(); }
+  } else if(action === 'auth-logout'){
+    if(sessionUser()){ doLogout(); }
+    else { showAuth(); }
   } else if(action === 'reset-progress'){
     if(actionEl.getAttribute('data-armed') === '1'){
       state = { scores:{}, examScore:null, name:'', lastLesson:'1-1' };
@@ -3230,29 +4064,568 @@ $('#menuBtn').addEventListener('click', function(){
 });
 
 /* ---------- arranque protegido ---------- */
+let LAST_ERROR = null;
 function fatal(err){
+  window.__ccReady = false;
+  LAST_ERROR = err;
+  const detalle = String((err && (err.stack || err.message)) || err);
+  const card = '<div class="box warn" style="margin:0 0 12px">' +
+    '<span class="box-title">⚠️ El curso no pudo iniciarse</span>' +
+    'Tranquilo: <b>tus cuentas y tu progreso siguen guardados</b> en este navegador. Prueba una opción de recuperación:' +
+    '</div>' +
+    '<div class="quiz-actions" style="justify-content:flex-start">' +
+    '<button type="button" class="btn small" data-rec="retry">🔄 Reintentar</button>' +
+    '<button type="button" class="btn small ghost" data-rec="guest">👤 Entrar como invitado</button>' +
+    '<button type="button" class="btn small ghost" data-rec="wipe-course">🧹 Reiniciar datos de este curso</button>' +
+    '<button type="button" class="btn small ghost" data-rec="wipe-all">🏭 Restablecer todo</button>' +
+    '</div>' +
+    '<details style="margin-top:12px;font-size:12px;color:var(--muted)"><summary style="cursor:pointer;font-weight:700">Detalle técnico (clic para ver)</summary>' +
+    '<div class="sd-out" style="margin-top:8px;max-height:150px;overflow:auto">' + esc(detalle) + '</div></details>' +
+    '<p style="font-size:12px;color:var(--muted);margin-top:10px">💾 Si nada funciona, descarga este archivo HTML y ábrelo con doble clic en tu navegador: ahí el curso corre siempre completo.</p>';
+  const layer = document.getElementById('authLayer');
+  if(layer && layer.classList.contains('show')){
+    layer.innerHTML = '<div class="auth-wrap"><div class="auth-card" style="padding:26px 24px">' +
+      '<div class="auth-head" style="padding:0 0 14px"><div class="auth-logo">🛟</div><h1>Modo de recuperación</h1></div>' +
+      card + '</div></div>';
+    return;
+  }
   const c = document.getElementById('content');
   if(!c) return;
-  c.innerHTML = '<div class="view" style="padding-top:40px">' +
-    '<div class="box warn"><span class="box-title">⚠️ No se pudo iniciar la interfaz del curso</span>' +
-    'Detalle técnico: <code>' + esc(String((err && err.message) || err)) + '</code>.<br><br>' +
-    'Prueba recargar la página (F5). Si estás en un visor integrado que bloquea JavaScript o el almacenamiento, ' +
-    'descarga el archivo <code>index.html</code> y ábrelo directamente en tu navegador (doble clic): ' +
-    'ahí el curso funciona al 100%, con progreso guardado y editores en vivo.</div></div>';
+  c.innerHTML = '<div class="view" style="padding-top:40px"><div class="auth-card" style="max-width:640px;margin:0 auto;padding:26px 26px">' +
+    '<div class="auth-head" style="padding:0 0 14px;text-align:left"><div class="auth-logo">🛟</div><h1 style="font-size:18px">Modo de recuperación</h1></div>' +
+    card + '</div></div>';
 }
+function handleRecovery(kind){
+  try{
+    if(kind === 'retry'){
+      try{ location.reload(); return; }catch(e){}
+      CURRENT = { view:'home' };
+      try{ render(); window.__ccReady = true; }catch(e){ fatal(e); }
+    } else if(kind === 'guest'){
+      doGuest();
+    } else if(kind === 'wipe-course'){
+      safeStore.remove(LEGACY_KEY);
+      const u = sessionUser();
+      if(u && DB.users[u]){ DB.users[u].data = blankData(); DB.users[u].dataJs = blankData(); saveDB(); }
+      state = blankData();
+      CURRENT = { view:'home' };
+      hideAuth();
+      try{ render(); window.__ccReady = true; }catch(e){ fatal(e); return; }
+      if(!sessionUser()){ showAuth({ text:'✅ Datos de este curso restablecidos. Crea tu cuenta o entra como invitado.', ok:true }); }
+    } else if(kind === 'wipe-all'){
+      try{
+        const kills = [];
+        for(let i = 0; i < localStorage.length; i++){
+          const k = localStorage.key(i);
+          if(k && String(k).indexOf('codecamp-') === 0) kills.push(k);
+        }
+        kills.forEach(function(k){ localStorage.removeItem(k); });
+      }catch(e){}
+      Object.keys(MEM).forEach(function(k){ delete MEM[k]; });
+      DB = { users:{}, session:null };
+      state = blankData();
+      AUTH_MODE = 'login';
+      CURRENT = { view:'home' };
+      hideAuth();
+      try{ render(); window.__ccReady = true; }catch(e){ fatal(e); return; }
+      showAuth({ text:'✅ Todo restablecido: cuentas y progreso en cero. Crea tu cuenta para empezar.', ok:true });
+    }
+  }catch(err){ fatal(err); }
+}
+window.addEventListener('error', function(ev){
+  if(!window.__ccReady){ try{ fatal(ev.error || ev.message || 'Error desconocido'); }catch(e){} }
+});
+window.addEventListener('unhandledrejection', function(ev){
+  if(!window.__ccReady){ try{ fatal((ev && ev.reason) || 'Error de promesa'); }catch(e){} }
+});
+
+/* ============================ CAMPUS: menú de usuario · perfil · idioma ============================ */
+const CAMPUS = {
+  thisCourse:'c1',
+  tagline:{ es:'Curso interactivo · Crea tu Lista de Tareas', en:'Interactive course · Build your To-Do List' },
+  courses:[
+    { id:'c1', file:'index.html',      emoji:'📝', name:{es:'Lista de Tareas', en:'To-Do List'},   total:29, max:1300, examMax:300, dataKey:'data'   },
+    { id:'c2', file:'javascript.html', emoji:'🎮', name:{es:'Juego de Memoria', en:'Memory Game'}, total:26, max:3715, examMax:300, dataKey:'dataJs' },
+    { id:'c3', file:'ingles.html',     emoji:'🇬🇧', name:{es:'Inglés B1', en:'English B1'},         total:34, max:4329, examMax:300, dataKey:'dataEn' }
+  ]
+};;
+
+const I18N = {
+  es:{
+    auth_login:'Ingresar', auth_create:'Crear cuenta', auth_user:'Usuario',
+    auth_pin:'PIN o contraseña', auth_pin2:'PIN o contraseña (mínimo 4 caracteres)',
+    auth_name:'Tu nombre (para el certificado)', auth_guest:'👤 Entrar como invitado',
+    auth_accounts:'👥 Cuentas en este dispositivo: ',
+    auth_note:'🔒 Cuenta <b>educativa y local</b>: tus datos se guardan solo en este navegador (ideal para computadoras compartidas de clase: cada quien tiene su progreso). No uses una contraseña real.',
+    auth_reset:'¿Problemas para entrar? Restablece solo los datos de este curso',
+    sb_home:'Inicio del curso', sb_exam:'Examen final', sb_book:'Libro de texto',
+    sb_project:'Proyecto final (código)', sb_report:'Boleta de calificaciones',
+    grade_none:'Calificación: —', grade_label:'Calificación: ', pct_course:'% del curso',
+    menu_profile:'👤 Ver mi perfil', menu_courses:'📚 Cursos del campus', menu_session:'🔑 Sesión',
+    menu_login:'🔓 Iniciar sesión', menu_logout:'🚪 Cerrar sesión', menu_lang:'🌐 Idioma / Language',
+    menu_current:'● curso actual', menu_local:'Datos locales de este navegador',
+    prof_title:'Mi perfil', prof_since:'Miembro desde', prof_progress:'Tu progreso por curso',
+    prof_lessons:'lecciones', prof_pts:'pts', prof_exam:'examen', prof_empty:'Sin progreso aún',
+    prof_note:'Los cursos comparten tu cuenta, pero cada uno guarda su propio progreso.',
+    lang_es:'🇪🇸 Español', lang_en:'🇬🇧 English'
+  },
+  en:{
+    auth_login:'Log in', auth_create:'Create account', auth_user:'Username',
+    auth_pin:'PIN or password', auth_pin2:'PIN or password (4+ characters)',
+    auth_name:'Your name (for the certificate)', auth_guest:'👤 Continue as guest',
+    auth_accounts:'👥 Accounts on this device: ',
+    auth_note:'🔒 Educational, local-only account: your data stays in this browser (great for shared classroom computers). Do not use a real password.',
+    auth_reset:'Trouble signing in? Reset only this course’s data',
+    sb_home:'Course home', sb_exam:'Final exam', sb_book:'Textbook',
+    sb_project:'Final project (code)', sb_report:'Report card',
+    grade_none:'Grade: —', grade_label:'Grade: ', pct_course:'% of course',
+    menu_profile:'👤 View my profile', menu_courses:'📚 Campus courses', menu_session:'🔑 Session',
+    menu_login:'🔓 Sign in', menu_logout:'🚪 Sign out', menu_lang:'🌐 Language / Idioma',
+    menu_current:'● current course', menu_local:'Local data on this browser',
+    prof_title:'My profile', prof_since:'Member since', prof_progress:'Your progress per course',
+    prof_lessons:'lessons', prof_pts:'pts', prof_exam:'exam', prof_empty:'No progress yet',
+    prof_note:'Courses share your account, but each one keeps its own progress.',
+    lang_es:'🇪🇸 Español', lang_en:'🇬🇧 English'
+  }
+};
+function langPref(){
+  try{
+    const u = sessionUser();
+    if(u && DB.users[u] && DB.users[u].lang) return DB.users[u].lang;
+    const saved = localStorage.getItem('codecamp-lang');
+    if(saved === 'en' || saved === 'es') return saved;
+  }catch(e){}
+  return 'es';
+}
+function t(key){
+  const L = I18N[langPref()] || I18N.es;
+  return (L[key] != null) ? L[key] : (I18N.es[key] != null ? I18N.es[key] : key);
+}
+function setLang(lang){
+  try{
+    const u = sessionUser();
+    if(u && DB.users[u]){ DB.users[u].lang = lang; saveDB(); }
+    else localStorage.setItem('codecamp-lang', lang);
+  }catch(e){ try{ localStorage.setItem('codecamp-lang', lang); }catch(e2){} }
+  applyLang();
+}
+function applyLang(){
+  try{ document.documentElement.setAttribute('lang', langPref() === 'en' ? 'en' : 'es'); }catch(e){}
+  try{
+    const small = document.querySelector('.brand-text small');
+    if(small) small.textContent = (CAMPUS.tagline[langPref()] || CAMPUS.tagline.es);
+  }catch(e){}
+  try{ updateUserMenu(); }catch(e){}
+  try{ renderSidebar(CURRENT); }catch(e){}
+  try{ updateChrome(); }catch(e){}
+  try{
+    const layer = document.getElementById('authLayer');
+    if(layer && layer.classList.contains('show')) showAuth();
+  }catch(e){}
+  try{
+    const pl = document.getElementById('profileLayer');
+    if(pl && pl.classList.contains('show')) renderProfileContent();
+  }catch(e){}
+  try{ if(typeof render==='function') render(); }catch(e){}
+}
+
+/* ---------- progreso por curso (lee la DB compartida) ---------- */
+function courseProgress(course){
+  try{
+    const u = sessionUser();
+    const rec = (u && DB.users[u]) ? DB.users[u] : null;
+    const d = (rec && rec[course.dataKey]) || {};
+    const scores = d.scores || {};
+    let pts = 0, done = 0;
+    Object.keys(scores).forEach(function(k){ done++; pts += (scores[k] || 0); });
+    const pct = course.max ? Math.min(100, Math.round(pts / course.max * 100)) : 0;
+    return { done:done, total:course.total, pts:pts, pct:pct, exam:(d.examScore != null ? d.examScore : null), examMax:course.examMax };
+  }catch(e){ return { done:0, total:course.total, pts:0, pct:0, exam:null, examMax:course.examMax }; }
+}
+
+/* ---------- menú de usuario (topbar derecha) ---------- */
+let UMENU = null;
+function buildUserMenuShell(){
+  if(document.getElementById('umenuBtn')){ UMENU = document.querySelector('.umenu'); updateUserMenu(); window.__ccMenuReady = true; return; }
+  const topUser = document.getElementById('topUser');
+  UMENU = document.createElement('div');
+  UMENU.className = 'umenu';
+  UMENU.innerHTML =
+    '<button type="button" class="umenu-btn" id="umenuBtn" title="Mi cuenta · cursos · idioma">👤 ▾</button>' +
+    '<div class="umenu-panel" id="umenuPanel" style="display:none"></div>';
+  const tb = document.getElementById('topbar');
+  if(tb && tb.appendChild){ tb.appendChild(UMENU); } else { document.body.appendChild(UMENU); }
+  if(topUser && topUser.parentNode){ topUser.remove(); }
+  window.__ccMenuReady = true;
+  updateUserMenu();
+}
+function updateUserMenu(){
+  if(!UMENU) return;
+  const btn = UMENU.querySelector('#umenuBtn');
+  const panel = UMENU.querySelector('#umenuPanel');
+  if(!btn || !panel) return;
+  const u = sessionUser();
+  const name = (u && DB.users[u] && DB.users[u].name) ? DB.users[u].name : (langPref()==='en' ? 'Guest' : 'Invitado');
+  btn.textContent = '👤 ' + name + ' ▾';
+  if(panel.style.display === 'none') return;   // solo botón si está cerrado
+  const me = CAMPUS.courses.filter(function(c){ return c.id === CAMPUS.thisCourse; })[0];
+  const others = CAMPUS.courses.filter(function(c){ return c.id !== CAMPUS.thisCourse; });
+  const L = langPref();
+  let h = '<div class="um-head"><span class="um-avatar">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
+    '<div><b>' + esc(name) + '</b>' +
+    (u && u !== '__guest' ? '<small>@' + esc(u) + ' · ' + t('prof_since') + ' ' + userSince(u) + '</small>' : '<small>' + t('menu_local') + '</small>') +
+    '</div></div>';
+  h += '<button type="button" class="um-item" data-um="profile">' + t('menu_profile') + '</button>';
+  h += '<div class="um-div">' + t('menu_courses') + '</div>';
+  h += '<div class="um-course um-now"><span>' + me.emoji + ' ' + (me.name[L] || me.name.es) + '</span><small>' + t('menu_current') + '</small></div>';
+  others.forEach(function(c){
+    h += '<a class="um-course" href="' + c.file + '"><span>' + c.emoji + ' ' + (c.name[L] || c.name.es) + '</span><small>' + courseProgress(c).pct + '%</small></a>';
+  });
+  h += '<div class="um-div">' + t('menu_session') + '</div>';
+  h += u
+    ? '<button type="button" class="um-item" data-um="logout">' + t('menu_logout') + '</button>'
+    : '<button type="button" class="um-item" data-um="login">' + t('menu_login') + '</button>';
+  h += '<div class="um-div">' + t('menu_lang') + '</div>';
+  h += '<div class="um-langs">' +
+    '<button type="button" class="um-lang' + (L === 'es' ? ' on' : '') + '" data-um="lang-es">' + t('lang_es') + '</button>' +
+    '<button type="button" class="um-lang' + (L === 'en' ? ' on' : '') + '" data-um="lang-en">' + t('lang_en') + '</button></div>';
+  panel.innerHTML = h;
+}
+function userSince(u){
+  try{
+    const rec = DB.users[u];
+    if(rec && rec.created) return new Date(rec.created).toLocaleDateString(langPref() === 'en' ? 'en-US' : 'es-MX', { month:'short', year:'numeric' });
+  }catch(e){}
+  return '';
+}
+function toggleUmenu(force){
+  const panel = UMENU && UMENU.querySelector('#umenuPanel');
+  if(!panel) return;
+  const open = (force != null) ? force : panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  if(open) updateUserMenu();
+}
+
+/* ---------- perfil ---------- */
+function ensureProfileLayer(){
+  if(document.getElementById('profileLayer')) return;
+  const pl = document.createElement('div');
+  pl.id = 'profileLayer'; pl.className = 'pmodal';
+  pl.innerHTML = '<div class="pmodal-back" data-um="close-profile"></div>' +
+    '<div class="pmodal-card" id="profileCard"></div>';
+  document.body.appendChild(pl);
+}
+function renderProfileContent(){
+  const card = document.getElementById('profileCard');
+  if(!card) return;
+  const u = sessionUser();
+  const name = (u && DB.users[u] && DB.users[u].name) ? DB.users[u].name : (langPref()==='en' ? 'Guest' : 'Invitado');
+  let h = '<button type="button" class="pmodal-x" data-um="close-profile">✕</button>';
+  h += '<div class="um-head"><span class="um-avatar big">' + esc((name[0] || '?').toUpperCase()) + '</span>' +
+    '<div><b>' + esc(name) + '</b>' +
+    (u && u !== '__guest' ? '<small>@' + esc(u) + ' · ' + t('prof_since') + ' ' + userSince(u) + '</small>' : '<small>' + t('menu_local') + '</small>') +
+    '<small>' + t('menu_lang') + ': <b>' + (langPref() === 'en' ? 'English' : 'Español') + '</b></small></div></div>';
+  h += '<h4 class="um-div" style="margin-top:14px">' + t('prof_progress') + '</h4>';
+  CAMPUS.courses.forEach(function(c){
+    const p = courseProgress(c);
+    const now = c.id === CAMPUS.thisCourse;
+    h += '<div class="pcourse' + (now ? ' now' : '') + '">' +
+      '<div class="prow"><span>' + c.emoji + ' ' + (c.name[langPref()] || c.name.es) + (now ? ' <small>(' + t('menu_current') + ')</small>' : '') + '</span>' +
+      '<a class="pgo" href="' + c.file + '">→</a></div>' +
+      '<div class="pbar"><div style="width:' + p.pct + '%"></div></div>' +
+      '<small>' + (p.done ? (p.done + '/' + p.total + ' ' + t('prof_lessons') + ' · ' + p.pts + '/' + c.max + ' ' + t('prof_pts') + (p.exam != null ? ' · ' + t('prof_exam') + ' ' + p.exam + '/' + p.examMax : '')) : t('prof_empty')) + '</small>' +
+      '</div>';
+  });
+  h += '<p class="um-note">' + t('prof_note') + '</p>';
+  card.innerHTML = h;
+}
+function openProfile(){ ensureProfileLayer(); renderProfileContent(); document.getElementById('profileLayer').classList.add('show'); toggleUmenu(false); }
+function closeProfile(){ const pl = document.getElementById('profileLayer'); if(pl) pl.classList.remove('show'); }
+
+/* ---------- delegación de clics del campus ---------- */
+document.addEventListener('click', function(e){
+  const tgt = e.target;
+  const um = tgt.closest ? tgt.closest('[data-um]') : null;
+  const btn = tgt.closest ? tgt.closest('#umenuBtn') : null;
+  if(btn){ e.preventDefault(); toggleUmenu(); return; }
+  if(um){
+    const act = um.getAttribute('data-um');
+    if(act === 'profile') openProfile();
+    else if(act === 'close-profile') closeProfile();
+    else if(act === 'login'){ toggleUmenu(false); try{ showAuth(); }catch(err){} }
+    else if(act === 'logout'){ toggleUmenu(false); try{ if(sessionUser()) doLogout(); else showAuth(); }catch(err){} }
+    else if(act === 'lang-es') setLang('es');
+    else if(act === 'lang-en') setLang('en');
+    return;
+  }
+  if(UMENU && !UMENU.contains(tgt)) toggleUmenu(false);
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){ toggleUmenu(false); closeProfile(); }
+});
+
+
+/* ---------- calificación tolerante de respuestas escritas ---------- */
+(function(){
+  const __norm = norm;
+  norm = function(s){ return __norm(s).replace(/[;:,.\s]+$/,''); };
+})();
+(function(){
+  const __fillOk = fillOk;
+  fillOk = function(q, val){
+    const v = String(val||'').trim();
+    if(v === '') return false;
+    try{ if(q.re && new RegExp(q.re,'i').test(v)) return true; }catch(e){}
+    const nv = norm(v).replace(/[<>]/g,'');
+    if((q.accept||[]).some(function(a){ return norm(a).replace(/[<>]/g,'') === nv; })) return true;
+    // la respuesta modelo (q.show) siempre es válida: comparación laxa sin símbolos
+    try{
+      if(q.show){
+        const loose = function(s){ return norm(s).replace(/[^a-z0-9]/g,''); };
+        if(loose(v) !== '' && loose(v) === loose(q.show)) return true;
+      }
+    }catch(e){}
+    return false;
+  };
+})();
+
+/* ---------- i18n de la interfaz completa (chrome de las vistas) ---------- */
+const CHROME_I18N = [
+  ['📝 Ponte a prueba','📝 Test yourself'],
+  ['Responde y presiona «Calificar». Puedes repetir el quiz todas las veces que quieras: se guarda tu <b>mejor calificación</b>.','Answer and press “Grade”. You can retake the quiz as many times as you like: your <b>best score</b> is kept.'],
+  ['✅ Calificar mis respuestas','✅ Grade my answers'],
+  ['🧮 Calificar mi código','🧮 Grade my code'],
+  ['✅ Calificar mi actividad','✅ Grade my activity'],
+  ['🏁 Calificar examen','🏁 Grade exam'],
+  ['Respondidas: ','Answered: '],
+  ['▶ Ejecutar','▶ Run'],
+  ['↺ Restablecer','↺ Reset'],
+  ['📋 Copiar','📋 Copy'],
+  ['🔄 Intentar de nuevo','🔄 Try again'],
+  ['¡Excelente! Dominas esta lección.','Excellent! You mastered this lesson.'],
+  ['¡Muy bien! Lección aprobada.','Well done! Lesson passed.'],
+  ['Vas por buen camino. Repasa y vuelve a intentar.','Good progress — review and try again.'],
+  ['No te rindas: rele la lección e inténtalo de nuevo.','Don’t give up: re-read the lesson and try again.'],
+  ['</b>módulos</span>','</b>modules</span>'],
+  ['</b>lecciones</span>','</b>lessons</span>'],
+  ['</b>puntos en juego</span>','</b>points at stake</span>'],
+  ['</b>completadas</span>','</b>completed</span>'],
+  ['📝 Examen Final</h1>','📝 Final Exam</h1>'],
+  ['Cada pregunta vale 10 puntos: <b>300 en total</b>. Se aprueba con <b>210/300 (70%)</b>.','Each question is worth 10 points: <b>300 in total</b>. Pass mark: <b>210/300 (70%)</b>.'],
+  ['Puedes presentarlo las veces que quieras: se guarda tu mejor nota. ¡Mucha suerte! 🍀','Take it as many times as you like: your best score is kept. Good luck! 🍀'],
+  ['📄 Boleta de calificaciones','📄 Report card'],
+  ['lecciones completadas','lessons completed'],
+  [' · examen: ',' · exam: '],
+  ['🎓 Tu certificado','🎓 Your certificate'],
+  ['Escribe tu nombre para personalizarlo (se guarda automáticamente):','Type your name to personalize it (saved automatically):'],
+  ['💾 Guardar nombre','💾 Save name'],
+  ['Imprimir/_guardar PDF','Print/Save PDF'],
+  ['Certificado de finalización · CodeCamp','Certificate of completion · CodeCamp'],
+  ['Calificación final:','Final grade:'],
+  ['✓ CURSO APROBADO','✓ COURSE PASSED'],
+  ['Completa el 70% de los puntos para aprobar','Reach 70% of the points to pass'],
+  ['🗑️ Borrar todo mi progreso','🗑️ Erase all my progress'],
+  ['Modo de recuperación','Recovery mode'],
+  ['⚠️ El curso no pudo iniciarse','⚠️ The course failed to start'],
+  ['tus cuentas y tu progreso siguen guardados en este navegador','your accounts and progress are still saved in this browser'],
+  ['🔄 Reintentar','🔄 Retry'],
+  ['👤 Entrar como invitado','👤 Continue as guest'],
+  ['🧹 Reiniciar datos de este curso','🧹 Reset this course data'],
+  ['🏭 Restablecer todo','🏭 Reset everything'],
+  ['Detalle técnico (clic para ver)','Technical details (click to view)'],
+  ['▶ Repasar ahora','▶ Review now'],
+  ['▶ Repasar (','▶ Review ('],
+  [' pendientes)',' pending)'],
+  ['🆕 Nuevas:','🆕 New:'],
+  ['🔁 Por repasar:','🔁 Due:'],
+  ['👀 Ver respuesta','👀 Reveal answer'],
+  ['😎 Lo sabía','😎 I knew it'],
+  ['😕 Otra vez','😕 Again'],
+  ['🎧 Escuchar','🎧 Listen'],
+  ['✅ ¡Sesión lista!','✅ Session complete!'],
+  ['Correctas: <b>','Correct: <b>'],
+  ['A repasar: <b>','To review: <b>']
+];
+function i18nChrome(html){
+  if(langPref() !== 'en') return html;
+  let h = String(html);
+  CHROME_I18N.forEach(function(p){ h = h.split(p[0]).join(p[1]); });
+  return h;
+}
+(function(){
+  const __r = render;
+  render = function(){
+    const r = __r();
+    try{
+      if(langPref()==='en'){
+        const c = document.getElementById('content');
+        if(c && c.innerHTML) c.innerHTML = i18nChrome(c.innerHTML);
+      }
+    }catch(e){ try{ console.error('[campus] i18n render:', e); }catch(e2){} }
+    return r;
+  };
+})();
+(function(){
+  const __f = fatal;
+  fatal = function(e){
+    __f(e);
+    try{
+      if(langPref()==='en'){
+        ['authLayer','content'].forEach(function(id){
+          const el = document.getElementById(id);
+          if(el && el.innerHTML) el.innerHTML = i18nChrome(el.innerHTML);
+        });
+      }
+    }catch(e2){}
+  };
+})();
+(function(){
+  if(typeof updateRemain !== 'function') return;
+  const __u = updateRemain;
+  updateRemain = function(section, questions){
+    __u(section, questions);
+    try{
+      if(langPref()==='en'){
+        const sp = section.querySelector('[data-respondidas]');
+        if(sp) sp.textContent = sp.textContent.replace('Respondidas:','Answered:');
+      }
+    }catch(e){}
+  };
+})();
+(function(){
+  if(typeof actAnswered !== 'function') return;
+  const __a = actAnswered;
+  actAnswered = function(section){
+    __a(section);
+    try{
+      if(langPref()==='en'){
+        const sp = section.querySelector('[data-act-respondidas]');
+        if(sp) sp.textContent = sp.textContent.replace('Respondidas:','Answered:');
+      }
+    }catch(e){}
+  };
+})();
+
+/* ---------- arranque del campus (menú + estilos) ---------- */
+function __ccCampusInit(){
+  try{
+    const st = document.createElement('style');
+    st.textContent = `
+.umenu{position:relative;display:inline-block;margin-left:auto;flex:none;margin-right:2px}
+.umenu-btn{cursor:pointer;font-weight:800;font-size:13px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;border:none;border-radius:99px;padding:9px 15px;box-shadow:0 4px 14px rgba(79,70,229,.4);letter-spacing:.01em;white-space:nowrap;flex:none}
+.umenu-btn:hover{filter:brightness(1.1)}
+.umenu-panel{position:absolute;right:0;top:calc(100% + 12px);width:292px;max-width:calc(100vw - 24px);background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 18px 50px rgba(15,23,42,.28);padding:10px;z-index:135;text-align:left;color:#1e293b}
+.um-head{display:flex;gap:10px;align-items:center;padding:6px 6px 10px;border-bottom:1px solid #eef2f7;margin-bottom:6px}
+.um-avatar{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;display:grid;place-items:center;font-weight:800;font-size:18px;flex:none}
+.um-avatar.big{width:56px;height:56px;font-size:24px}
+.um-head b{display:block;font-size:15px}
+.um-head small{display:block;color:#64748b;font-size:11.5px;margin-top:2px}
+.um-item{display:block;width:100%;text-align:left;background:none;border:none;padding:9px 10px;border-radius:10px;font-size:13.5px;font-weight:600;color:#334155;cursor:pointer}
+.um-item:hover{background:#f1f5f9}
+.um-div{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#94a3b8;font-weight:800;padding:10px 6px 4px}
+.um-course{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;color:#334155;text-decoration:none;font-size:13.5px;font-weight:600}
+a.um-course:hover{background:#f1f5f9}
+.um-course small{color:#94a3b8;font-weight:700}
+.um-now{background:#eef2ff;color:#4338ca}
+.um-now small{color:#6366f1}
+.um-langs{display:flex;gap:6px;padding:2px 0 4px}
+.um-lang{flex:1;border:1px solid #e2e8f0;background:#fff;border-radius:10px;padding:8px 4px;font-size:12.5px;font-weight:700;cursor:pointer;color:#475569}
+.um-lang.on{border-color:#4f46e5;background:#eef2ff;color:#4338ca}
+.um-note{font-size:11px;color:#94a3b8;margin:8px 4px 2px}
+.pmodal{position:fixed;inset:0;z-index:120;display:none;align-items:center;justify-content:center;padding:16px}
+.pmodal.show{display:flex}
+.pmodal-back{position:absolute;inset:0;background:rgba(15,23,42,.55)}
+.pmodal-card{position:relative;width:min(480px,100%);max-height:86vh;overflow:auto;background:#fff;border-radius:20px;padding:22px;box-shadow:0 24px 70px rgba(0,0,0,.35);color:#1e293b}
+.pmodal-x{position:absolute;top:10px;right:12px;border:none;background:#f1f5f9;width:32px;height:32px;border-radius:10px;font-size:14px;cursor:pointer;font-weight:800;color:#475569}
+.pcourse{border:1px solid #eef2f7;border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.pcourse.now{border-color:#c7d2fe;background:#f8faff}
+.prow{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:14px;margin-bottom:8px}
+.prow small{color:#94a3b8;font-weight:600}
+.pgo{font-size:18px;text-decoration:none;color:#4f46e5;font-weight:800}
+.pbar{height:9px;background:#eef2f7;border-radius:99px;overflow:hidden;margin-bottom:6px}
+.pbar>div{height:100%;background:linear-gradient(90deg,#4f46e5,#7c3aed);border-radius:99px}
+.pcourse small{color:#64748b}
+.campus-nav{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:5;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;background:rgba(255,255,255,.96);border:1px solid #e2e8f0;border-radius:99px;padding:8px 14px;box-shadow:0 10px 30px rgba(15,23,42,.25);font-size:13px;font-weight:700}
+.campus-nav a{color:#4f46e5;text-decoration:none;white-space:nowrap}
+.campus-nav a:hover{text-decoration:underline}
+.campus-nav .cn-now{color:#94a3b8;white-space:nowrap}
+.campus-nav .cn-t{color:#94a3b8;font-weight:800;margin-right:2px}
+.qsec{font-weight:800;color:#334155;margin:18px 0 4px;padding:8px 12px;background:#f8fafc;border-left:4px solid #4f46e5;border-radius:8px;font-size:13.5px}
+.matchrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 12px;border:1px dashed #e2e8f0;border-radius:10px;margin:6px 0;font-size:13.5px}
+.matchrow select{border:1px solid #cbd5e1;border-radius:8px;padding:6px 8px;font-size:13px;background:#fff;max-width:55%}
+.chk{display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border:1px solid #eef2f7;border-radius:10px;margin:6px 0;cursor:pointer;font-size:13.5px}
+.chk input{margin-top:2px;transform:scale(1.25)}
+.chk .qpts{margin-left:auto}
+.writebox textarea{width:100%;min-height:170px;border:1px solid #cbd5e1;border-radius:12px;padding:12px;font:13px ui-monospace,monospace;resize:vertical}
+.wordcount{font-size:12px;color:#64748b;font-weight:700;margin-top:4px}
+.audiobox{display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:#fdf4ff;border:1px solid #f5d0fe;border-radius:12px;padding:10px 12px;margin:8px 0}
+.audiobox .saybtn{border:none;border-radius:9px;padding:8px 13px;font-weight:700;font-size:12.5px;cursor:pointer;background:#a21caf;color:#fff}
+.audiobox .saybtn.slow{background:#7e22ce}
+.audiobox .saybtn:disabled{background:#d8d4e8;cursor:not-allowed}
+.audiobox .anote{font-size:11.5px;color:#86198f}
+.tscript{margin:6px 0;font-size:12.5px}
+.tscript summary{cursor:pointer;color:#7c3aed;font-weight:700}
+.tscript p{margin:6px 0;padding:10px 12px;background:#faf5ff;border-radius:10px;border:1px dashed #e9d5ff}
+.srsbox{border:1px solid #bbf7d0;background:#f0fdf4;border-radius:16px;padding:16px;margin:16px 0}
+.srs-stats{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.srs-chip{background:#dcfce7;color:#166534;border-radius:99px;padding:4px 12px;font-size:12px;font-weight:800}
+.srs-card{background:#fff;border:2px solid #16a34a;border-radius:16px;padding:22px;text-align:center;min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.srs-card .front{font-size:26px;font-weight:800;color:#14532d}
+.srs-card .es{color:#4d7c0f;font-size:14px;font-weight:700}
+.srs-card .back{font-size:15px;color:#1e293b;line-height:1.5}
+.srs-actions{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.srs-actions button{border:none;border-radius:10px;padding:10px 16px;font-weight:800;cursor:pointer;font-size:13px}
+.srs-actions .good{background:#16a34a;color:#fff}
+.srs-actions .again{background:#fee2e2;color:#b91c1c}
+.srs-actions .hear{background:#e0f2fe;color:#0369a1}
+.srs-prog{font-size:12px;color:#166534;font-weight:800;margin-top:10px}
+`;
+    document.head.appendChild(st);
+  }catch(e){}
+  try{ if(typeof __ccLabelOverrides === 'function') __ccLabelOverrides(); }catch(e){ try{ console.error('[campus] overrides:', e); }catch(e2){} }
+  try{ buildUserMenuShell(); }catch(e){ try{ console.error('[campus] menú:', e); }catch(e2){} }
+  try{ applyLang(); }catch(e){ try{ console.error('[campus] idioma:', e); }catch(e2){} }
+}
+/* ---------- barra de cursos bajo el login (acceso sin menú) ---------- */
+(function(){
+  const __origShowAuth = showAuth;
+  showAuth = function(msg, vals){
+    const r = __origShowAuth(msg, vals);
+    try{
+      const layer = document.getElementById('authLayer');
+      if(layer && layer.classList.contains('show') && !layer.querySelector('.campus-nav')){
+        const L = langPref();
+        const nav = document.createElement('div');
+        nav.className = 'campus-nav';
+        nav.innerHTML = '<span class="cn-t">' + t('menu_courses') + ':</span>' + CAMPUS.courses.map(function(c){
+          if(c.id === CAMPUS.thisCourse) return '<span class="cn-now">' + c.emoji + ' ' + (c.name[L] || c.name.es) + '</span>';
+          return '<a href="' + c.file + '">' + c.emoji + ' ' + (c.name[L] || c.name.es) + '</a>';
+        }).join('');
+        layer.appendChild(nav);
+      }
+    }catch(e){ try{ console.error('[campus] nav login:', e); }catch(e2){} }
+    return r;
+  };
+})();
+
+
+loadDB();
+try{ migrarHuerfanos(); }catch(e){ try{ console.error('[migración] arranque:', e); }catch(e2){} }
+try{ __ccCampusInit(); }catch(e){ try{ console.error('[campus] init:', e); }catch(e2){} }
 try{ loadState(); }catch(e){}
 try{ CURRENT = parseHash(); }catch(e){ CURRENT = { view:'home' }; }
 try{
   window.addEventListener('hashchange', function(){
     try{ CURRENT = parseHash(); }catch(e){}
-    try{ render(); }catch(e){ fatal(e); }
+    try{ render(); window.__ccReady = true; }catch(e){ fatal(e); }
   });
 }catch(e){}
 (function(){
   const bd = document.getElementById('backdrop');
   if(bd){ bd.addEventListener('click', function(){ const sb = $('#sidebar'); if(sb) sb.classList.remove('open'); }); }
 })();
-try{ render(); }catch(e){ fatal(e); }
+try{ render(); window.__ccReady = true; }catch(e){ fatal(e); }
+if(!sessionUser()){ showAuth(); }
 </script>
 </body>
 </html>

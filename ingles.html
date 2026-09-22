@@ -485,7 +485,7 @@ MODULES.push({
     {t:'activity', kind:'diagnostic', title:'✏️ Actividad 2 · Test diagnóstico B1 (20 preguntas)', sub:'4 secciones con el estilo real de cada paper. Sin diccionario: se trata de medir tu punto de partida.',
       items:[
         {sec:'📖 Sección A · Estilo Reading (Part 1: señales y mensajes)'},
-        {type:'mc', q:'Sign: “PLEASE QUEUE HERE AFTER 9 AM”. What should you do?', options:['Go in immediately','Wait in line after 9 am','Pay before 9 am','Come back tomorrow'], correct:1, pts:5, explain:'queue = hacer fila. La señal pide formarse en fila DESPUÉS de las 9.'},
+        {type:'mc', q:'Sign: “PLEASE QUEUE HERE AFTER 9 AM”. What should you do?', options:['Go in immediately','Wait in line after 9 am','Pay before 9 am','Come back tomorrow'], correct:1, pts:5, explain:'queue = hacer fila (se pronuncia /kjuː/, como la letra “Q”; ortografía rara pero correcta: Q-U-E-U-E). Muy usada en señales británicas: “Queue here” = “Fórmese aquí”. La señal pide formarse en fila DESPUÉS de las 9.'},
         {type:'mc', q:'Note: “Mum — football practice moved to 5:30. Text me when you’re on the bus. – Tom”. What does Tom want?', options:['A message when his mum is on the bus','A ride at 5:30','New football boots','To skip practice'], correct:0, pts:5, explain:'“Text me” = mándame un mensaje: quiere saber cuándo ella va en camino.'},
         {type:'mc', q:'Sign: “REDUCED PRICE ON ALL WINTER JACKETS – THIS WEEKEND ONLY”. When can you pay less?', options:['All winter','Only this weekend','Never','Next month'], correct:1, pts:5, explain:'“This weekend only” limita la oferta al fin de semana.'},
         {type:'mc', q:'Email: “The meeting is now on Thursday, not Wednesday. Same time.” What changed?', options:['The time','The day','The place','Nothing'], correct:1, pts:5, explain:'Cambió el DÍA (jueves); la hora sigue igual.'},
@@ -1464,7 +1464,7 @@ Fallas    → vuelve a la Caja 1 (y ya está: sin culpa)
       {type:'fill', q:'Pasado de “think”:', accept:['thought'], pts:10, hint:'T-H…'},
       {type:'fill', q:'Participio de “see”:', accept:['seen'], pts:10, hint:'have + …'},
       {type:'mc', q:'“He isn’t here — he ___ to the bank.”', options:['has been','has gone','has went','is going been'], correct:1, pts:10, explain:'gone = fue y sigue allá. “has been” significaría que ya volvió.'},
-      {type:'mc', q:'La 3.ª persona de “do” es…', options:['dos','does','doz','does'], correct:1, pts:10, explain:'he/she/it DOES (se pronuncia /dʌz/).'}
+      {type:'mc', q:'La 3.ª persona de “do” es…', options:['dos','does','doz','dose'], correct:1, pts:10, explain:'he/she/it DOES (se pronuncia /dʌz/).'}
     ]},
     {t:'activity', kind:'vocab', title:'✏️ Actividad 30 · Motor de irregulares (8 verbos)', sub:'Completa las formas. Estos verbos valen oro en Writing Part 2 (la historia).',
       items:[
@@ -2148,6 +2148,7 @@ const SRS_DECKS = {
       {f:'pass', es:'aprobar', ex:'She passed her exam with 85%.'},
       {f:'practise', es:'practicar', ex:'I practise English every day.'},
       {f:'quiet', es:'tranquilo/silencioso', ex:'The library is quiet.'},
+      {f:'queue', es:'fila (hacer cola)', ex:'There was a long queue outside the bank.'},
       {f:'receive', es:'recibir', ex:'I received your email.'},
       {f:'refund', es:'reembolso', ex:'Can I get a refund?'},
       {f:'rent', es:'rentar/alquilar', ex:'We rent a small flat.'},
@@ -2243,7 +2244,7 @@ function srsAction(el){
   const box = el.closest('[data-srsbox]');
   const deck = box ? box.getAttribute('data-srsbox') : (el.getAttribute('data-deck') || (SRS_SESSION && SRS_SESSION.deck));
   if(act === 'start'){ srsStartSession(deck); }
-  else if(act === 'exit'){ SRS_SESSION = null; saveState(); }
+  else if(act === 'exit'){ SRS_SESSION = null; saveState(); if(box){ const zone2 = box.querySelector('.srs-zone'); if(zone2) zone2.innerHTML = ''; } try{ renderSidebar(CURRENT); }catch(e2){} return; }
   else if(!SRS_SESSION) return;
   else if(act === 'reveal'){ SRS_SESSION.revealed = true; }
   else if(act === 'good' || act === 'again'){
@@ -3124,7 +3125,6 @@ function initDemos(root){
     });
   });
   /* app final */
-  $$('[data-appframe]', root).forEach(function(f){ f.srcdoc = FINAL_DEMO; });
 }
 
 /* ---------- render de bloques ---------- */
@@ -3283,7 +3283,7 @@ function viewReport(){
     '<td style="white-space:nowrap"><b>'+(state.examScore == null ? 0 : state.examScore)+'</b>/'+EXAM_MAX+' pts</td>'+
     '<td><div class="rbar"><div style="width:'+exPct+'%"></div></div></td></tr>';
 
-  const fecha = new Date().toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' });
+  const fecha = new Date().toLocaleDateString(langPref()==='en' ? 'en-US' : 'es-MX', { year:'numeric', month:'long', day:'numeric' });
   const nombre = state.name ? esc(state.name) : '____________________';
 
   return '<div class="view">'+
@@ -3292,7 +3292,7 @@ function viewReport(){
     '<div class="grade-hero">'+
     '<div class="bigpct">'+pct+'<small>/100</small></div>'+
     '<div class="gh-info"><h3 style="font-size:18px">'+msg+'</h3>'+
-    '<p>'+pts+' de '+TOTAL_MAX+' puntos · '+doneCount+' de '+ALL_LESSONS.length+' lecciones completadas'+(state.examScore != null ? ' · examen: '+state.examScore+'/'+EXAM_MAX : '')+'</p>'+
+    '<p>'+pts+' '+(langPref()==='en'?'of':'de')+' '+TOTAL_MAX+' '+(langPref()==='en'?'points':'puntos')+' · '+doneCount+' '+(langPref()==='en'?'of':'de')+' '+ALL_LESSONS.length+' '+(langPref()==='en'?'lessons completed':'lecciones completadas')+(state.examScore != null ? ' · examen: '+state.examScore+'/'+EXAM_MAX : '')+'</p>'+
     (pct >= 70 ? '<button class="btn small green" data-nav="project">📦 Ir por el código del proyecto</button> <button class="btn small ghost" data-nav="exam">📝 '+(state.examScore == null?'Presentar examen':'Repetir examen')+'</button>' : '')+
     '</div></div>'+
     '<table class="rep"><thead><tr><th>Lección</th><th>Estado</th><th>Puntos</th><th>%</th></tr></thead><tbody>'+rows+'</tbody></table>'+
@@ -3684,9 +3684,13 @@ const CAMPUS = {
   thisCourse:'c3',
   tagline:{ es:'Curso interactivo · Inglés B1 Preliminary', en:'Interactive course · English B1 Preliminary' },
   courses:[
-    { id:'c1', file:'index.html',      emoji:'📝', name:{es:'Lista de Tareas', en:'To-Do List'},   total:29, max:1300, examMax:300, dataKey:'data'   },
+    { id:'c1', file:'index.html',      emoji:'📝', name:{es:'Lista de Tareas', en:'To-Do List'},   total:29, max:1300, examMax:300, dataKey:'dataEn' },
     { id:'c2', file:'javascript.html', emoji:'🎮', name:{es:'Juego de Memoria', en:'Memory Game'}, total:26, max:3715, examMax:300, dataKey:'dataJs' },
-    { id:'c3', file:'ingles.html',     emoji:'🇬🇧', name:{es:'Inglés B1', en:'English B1'},         total:34, max:4329, examMax:300, dataKey:'dataEn' }
+    { id:'c3', file:'ingles.html',     emoji:'🇬🇧', name:{es:'Inglés B1', en:'English B1'},         total:34, max:4329, examMax:300, dataKey:'dataEn' },
+    { id:'c4', file:'sql.html',        emoji:'🗄️', name:{es:'Bases de datos SQL', en:'SQL Databases'}, total:30, max:3040, examMax:300, dataKey:'dataSql' },
+    { id:'c5', file:'python.html',     emoji:'🐍', name:{es:'Python desde cero', en:'Python from scratch'}, total:30, max:4014, examMax:300, dataKey:'dataPy' },
+    { id:'c6', file:'unreal.html',     emoji:'🎮', name:{es:'Unreal Engine desde cero', en:'Unreal Engine from scratch'}, total:30, max:4055, examMax:300, dataKey:'dataUnreal' },
+  { id:'c7', file:'unity.html',      emoji:'🕹️', name:{es:'Unity desde cero (C#)', en:'Unity from scratch (C#)'}, total:30, max:3780, examMax:300, dataKey:'dataUnity' }
   ]
 };;
 
@@ -3915,14 +3919,25 @@ document.addEventListener('keydown', function(e){
   fillOk = function(q, val){
     const v = String(val||'').trim();
     if(v === '') return false;
-    try{ if(q.re && new RegExp(q.re,'i').test(v)) return true; }catch(e){}
-    const nv = norm(v).replace(/[<>]/g,'');
+    // normalización defensiva: lo que los teclados reales escriben
+    const limpiar = function(s){
+      return String(s)
+        .replace(/[\u00A0\u2000-\u200B\uFEFF]/g,' ')     // espacios invisibles → espacio
+        .replace(/[\u2013\u2014\u2212]/g,'-')               // guiones "inteligentes" → -
+        .replace(/[\u2018\u2019\u201B]/g,"'")               // apóstrofes curvos → '
+        .replace(/[\u201C\u201D]/g,'"')                      // comillas curvas → "
+        .replace(/\s+/g,' ')
+        .trim();
+    };
+    const v2 = limpiar(v);
+    try{ if(q.re && (new RegExp(q.re,'i').test(v) || new RegExp(q.re,'i').test(v2))) return true; }catch(e){}
+    const nv = norm(v2).replace(/[<>]/g,'');
     if((q.accept||[]).some(function(a){ return norm(a).replace(/[<>]/g,'') === nv; })) return true;
     // la respuesta modelo (q.show) siempre es válida: comparación laxa sin símbolos
     try{
       if(q.show){
         const loose = function(s){ return norm(s).replace(/[^a-z0-9]/g,''); };
-        if(loose(v) !== '' && loose(v) === loose(q.show)) return true;
+        if(loose(v2) !== '' && loose(v2) === loose(q.show)) return true;
       }
     }catch(e){}
     return false;
@@ -3984,7 +3999,21 @@ const CHROME_I18N = [
   ['🎧 Escuchar','🎧 Listen'],
   ['✅ ¡Sesión lista!','✅ Session complete!'],
   ['Correctas: <b>','Correct: <b>'],
-  ['A repasar: <b>','To review: <b>']
+  ['A repasar: <b>','To review: <b>'],
+  ['pendiente</span>','pending</span>'],
+  ['completada</span>','completed</span>'],
+  ['presentado</span>','taken</span>'],
+  ['📝 <b>Examen final</b>','📝 <b>Final exam</b>'],
+  ['<th>Lección</th><th>Estado</th><th>Puntos</th><th>%</th>','<th>Lesson</th><th>Status</th><th>Points</th><th>%</th>'],
+  ['>Presentar examen<','>Take the exam<'],
+  ['>Repetir examen<','>Retake exam<'],
+  ['Ej. Ana Martínez','e.g. Jane Doe'],
+  ['>📦 Ir por el código del proyecto<','>📦 Get the project code<'],
+  ['Tu progreso oficial del curso «Inglés B1 · Cambridge Preliminary». Cada quiz y ejercicio aprobado suma; tu mejor intento siempre cuenta.','Your official progress for the course “English B1 · Cambridge Preliminary”. Every passed quiz and exercise counts; your best attempt is always kept.'],
+  ['🏆 Nivel: Desarrollador Web Destacado. ¡Dominio total!','🏆 Level: Outstanding Web Developer. Total mastery!'],
+  ['🎉 ¡APROBADO! Ya sabes construir y publicar una aplicación web completa.','🎉 PASSED! You can build and publish a complete web application.'],
+  ['📚 Buen avance. Completa las lecciones pendientes y repite quizzes para subir tu nota.','📚 Good progress. Finish the pending lessons and retake quizzes to raise your grade.'],
+  ['💪 El viaje apenas comienza: cada quiz aprobado suma puntos. ¡Tú puedes!','💪 The journey is just beginning: every passed quiz adds points. You can do it!'],
 ];
 function i18nChrome(html){
   if(langPref() !== 'en') return html;

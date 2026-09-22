@@ -1,9 +1,10 @@
 // ============================================================
-// server.js — servidor del campus CodeCamp (3 cursos)
+// server.js — servidor del campus CodeCamp (4 cursos)
 // Sirve los archivos estáticos del campus:
 //   index.html      ← Curso 1: Lista de Tareas
 //   javascript.html ← Curso 2: JavaScript + Juego de Memoria
 //   ingles.html     ← Curso 3: Inglés B1 Preliminary
+//   sql.html        ← Curso 4: Bases de datos SQL
 // Ejecutar local: npm start  ·  En Render: Web Service o Static Site
 // ============================================================
 const http = require('http');

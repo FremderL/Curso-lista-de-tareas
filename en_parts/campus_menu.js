@@ -235,14 +235,25 @@ document.addEventListener('keydown', function(e){
   fillOk = function(q, val){
     const v = String(val||'').trim();
     if(v === '') return false;
-    try{ if(q.re && new RegExp(q.re,'i').test(v)) return true; }catch(e){}
-    const nv = norm(v).replace(/[<>]/g,'');
+    // normalización defensiva: lo que los teclados reales escriben
+    const limpiar = function(s){
+      return String(s)
+        .replace(/[\u00A0\u2000-\u200B\uFEFF]/g,' ')     // espacios invisibles → espacio
+        .replace(/[\u2013\u2014\u2212]/g,'-')               // guiones "inteligentes" → -
+        .replace(/[\u2018\u2019\u201B]/g,"'")               // apóstrofes curvos → '
+        .replace(/[\u201C\u201D]/g,'"')                      // comillas curvas → "
+        .replace(/\s+/g,' ')
+        .trim();
+    };
+    const v2 = limpiar(v);
+    try{ if(q.re && (new RegExp(q.re,'i').test(v) || new RegExp(q.re,'i').test(v2))) return true; }catch(e){}
+    const nv = norm(v2).replace(/[<>]/g,'');
     if((q.accept||[]).some(function(a){ return norm(a).replace(/[<>]/g,'') === nv; })) return true;
     // la respuesta modelo (q.show) siempre es válida: comparación laxa sin símbolos
     try{
       if(q.show){
         const loose = function(s){ return norm(s).replace(/[^a-z0-9]/g,''); };
-        if(loose(v) !== '' && loose(v) === loose(q.show)) return true;
+        if(loose(v2) !== '' && loose(v2) === loose(q.show)) return true;
       }
     }catch(e){}
     return false;

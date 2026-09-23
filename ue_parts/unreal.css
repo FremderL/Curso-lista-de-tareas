@@ -1,0 +1,39 @@
+/* ===== Curso Unreal: editor de nodos BPX ===== */
+.bpex{margin:18px 0}
+.bptask{border:1px solid #e2e8f0;border-radius:14px;padding:14px;margin:12px 0;background:#fff}
+.bptask.solved{border-color:#86efac;background:#f6fef9}
+.bppalette{margin:10px 0}
+.bppalette summary{cursor:pointer;font-size:13px;font-weight:700;color:#2563eb}
+.bppalette-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.bppalette-grid .chipq{font-size:11.5px;padding:4px 9px}
+.bpcanvas-wrap{position:relative;margin-top:10px;border-radius:14px;overflow:hidden;border:1.5px solid #cbd5e1;background:#0b1220 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26"><circle cx="1.5" cy="1.5" r="1.4" fill="%231e293b"/></svg>')}
+.bpcanvas{position:relative;min-height:210px;overflow:hidden}
+.bpcanvas.bpstatic{pointer-events:none}
+.bpwires{position:absolute;inset:0;pointer-events:none}
+.bpnode{position:absolute;width:216px;background:#1e293b;border:1.5px solid #475569;border-radius:12px;color:#e2e8f0;font-size:12px;box-shadow:0 4px 14px rgba(0,0,0,.35);user-select:none}
+.bpnode:has(.bppin.pending){border-color:#fbbf24}
+.bpn-head{display:flex;align-items:center;gap:6px;font-weight:800;font-size:12.5px;padding:7px 9px;border-bottom:1px solid #334155;background:#273449;border-radius:11px 11px 0 0;cursor:grab}
+.bpn-head span{flex:1;min-width:0}
+.bpdel{border:none;background:transparent;cursor:pointer;font-size:12px;opacity:.6;padding:0}
+.bpdel:hover{opacity:1}
+.bpn-body{padding:7px 9px 2px;display:flex;flex-direction:column;gap:4px}
+.bpped{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:#94a3b8}
+.bpped span{flex:none;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bpinput{flex:1;min-width:0;background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:7px;padding:3px 7px;font-size:11.5px;font-family:inherit}
+.bpinput:focus{outline:none;border-color:#38bdf8}
+.bpn-desc{padding:6px 9px 0;font-size:10.5px;color:#7c8ba1;font-style:italic}
+.bpn-pins{display:flex;justify-content:space-between;padding:7px 8px 9px;gap:8px}
+.bpn-col{display:flex;flex-direction:column;gap:5px;min-width:0}
+.bpn-col.right{align-items:flex-end;text-align:right}
+.bpprow{display:flex;align-items:center;gap:5px}
+.bpprow.out{flex-direction:row-reverse}
+.bpplabel{font-size:10.5px;color:#aab7cc}
+.bppin{flex:none;width:13px;height:13px;border-radius:50%;cursor:crosshair;box-shadow:0 0 0 2px rgba(255,255,255,.14)}
+.bppin.exec{width:0;height:0;border-radius:0;background:transparent !important;border-left:13px solid #f1f5f9;border-top:8px solid transparent;border-bottom:8px solid transparent}
+.bppin.pending{box-shadow:0 0 0 3px #fbbf24}
+.bphintbar{display:none;background:#fef3c7;color:#92400e;font-size:12px;font-weight:700;padding:6px 10px;border-radius:10px;margin-bottom:6px}
+.bplog{background:#0f172a;border-radius:12px;padding:0;margin-top:10px;overflow:hidden}
+.bplog-head{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:#94a3b8;padding:8px 12px 0}
+.bplog pre{margin:0;padding:8px 12px 12px;color:#93c5fd;font:12.5px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;white-space:pre-wrap}
+.bperr{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:12px;padding:10px 14px;font-size:13.5px;font-weight:600;white-space:pre-wrap;margin-top:10px}
+.bpcanvas.bpstatic .bpnode{cursor:default}

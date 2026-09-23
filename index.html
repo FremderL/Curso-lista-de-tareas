@@ -756,7 +756,7 @@ h1 {
     {t:'quiz', questions:[
       {type:'mc', q:'¿Qué propiedad cambia el color del FONDO de un elemento?', options:['color','background-color','bgcolor','background-text'], correct:1, pts:10, explain:'color = color del texto; background-color = color del fondo.'},
       {type:'mc', q:'El código hex <code>#ff0000</code> corresponde a…', options:['azul puro','verde puro','rojo puro','blanco'], correct:2, pts:10, explain:'El formato es RRGGBB: ff de rojo al máximo, 00 de verde y 00 de azul → rojo puro.'},
-      {type:'fill', q:'Escribe la propiedad que centra un texto horizontalmente:', accept:['text-align','text-align: center','text-align: center;','text-align:center'], re:'^\\s*text\\s*-\\s*align\\s*(:\\s*center)?\\s*;?\\s*$', show:'text-align: center;', pts:10, hint:'Empieza con “text”…'}
+      {type:'fill', q:'Escribe la propiedad que centra un texto horizontalmente:', accept:['text-align','text-align: center','text-align:center','alinear el texto al centro','centrar el texto'], re:'^\\s*<?\\s*text\\s*[-\\u2013]?\\s*align\\s*(:\\s*(text\\s*[-\\u2013]?\\s*)?center\\s*;?\\s*)?\\s*>?\\s*;?\\s*$', show:'text-align: center;', pts:10, hint:'Empieza con “text”…'}
     ]}
   ]},
 
@@ -3037,7 +3037,7 @@ const LEGACY_KEY = 'codecamp-lista-tareas-v1';
 const DB_KEY = 'codecamp-db-v2';
 let DB = { users:{}, session:null };
 let AUTH_MODE = 'login';
-function blankData(){ return { scores:{}, examScore:null, name:'', lastLesson:'1-1' }; }
+function blankData(){ return { scores:{}, examScore:null, name:'', lastLesson:'1-1', srs:{}, edCode:{} }; }
 function hashPin(s){
   let h = 5381;
   const t = String(s);
@@ -3080,7 +3080,7 @@ let state = blankData();   // estado del curso (declarado: evita ReferenceError)
 function loadState(){
   let base = blankData();
   const u = sessionUser();
-  if(u){ base = Object.assign(base, DB.users[u].data || {}); }
+  if(u){ if(!DB.users[u].dataEn && DB.users[u].data){ DB.users[u].dataEn = DB.users[u].data; try{ saveDB(); }catch(e){} } base = Object.assign(base, DB.users[u].dataEn || {}); }
   else{
     try{ const raw = safeStore.get(LEGACY_KEY); if(raw){ base = Object.assign(base, JSON.parse(raw)); } }catch(e){}
   }
@@ -3088,7 +3088,7 @@ function loadState(){
 }
 function saveState(){
   const u = sessionUser();
-  if(u){ DB.users[u].data = state; saveDB(); }
+  if(u){ DB.users[u].dataEn = state; saveDB(); }
   else{ safeStore.set(LEGACY_KEY, JSON.stringify(state)); }
 }
 /* ---------- pantalla de acceso ---------- */
@@ -3158,11 +3158,11 @@ function doCreate(){
   if(u === '__guest'){ return showAuth({ text:'Ese nombre de usuario está reservado.', ok:false }, { u:'', name:name }); }
   if(DB.users[u] && !DB.users[u].hidden){ return showAuth({ text:'Ese usuario ya existe en este dispositivo. Elige otro.', ok:false }, { u:'', name:name }); }
   if(p.length < 4){ return showAuth({ text:'El PIN necesita al menos 4 caracteres.', ok:false }, { u:u, name:name }); }
-  DB.users[u] = { name:name, pin:hashPin(p), hidden:false, created:Date.now(), data:blankData() };
+  DB.users[u] = { name:name, pin:hashPin(p), hidden:false, created:Date.now(), dataEn:blankData() };
   DB.session = u; migrarHuerfanos(); saveDB(); loadState(); hideAuth(); render();
 }
 function doGuest(){
-  if(!DB.users['__guest']){ DB.users['__guest'] = { name:'Invitado', pin:'', hidden:true, created:Date.now(), data:blankData() }; }
+  if(!DB.users['__guest']){ DB.users['__guest'] = { name:'Invitado', pin:'', hidden:true, created:Date.now(), dataEn:blankData() }; }
   DB.session = '__guest'; migrarHuerfanos(); saveDB(); loadState(); hideAuth(); render();
 }
 function doLogout(){
@@ -3267,13 +3267,15 @@ function codeBlockHtml(b){
 
 /* ---------- editores en vivo ---------- */
 let EDITOR_CODES = [];
-function editorHtmlInner(b){
+function editorHtmlInner(b, lessonId){
   const idx = EDITOR_CODES.push(b.code) - 1;
-  return '<div class="edwrap" data-ed="'+idx+'">'+
+  const edKey = (lessonId || 'x') + ':' + idx;
+  const savedCode = (state.edCode && state.edCode[edKey] != null) ? state.edCode[edKey] : '';
+  return '<div class="edwrap" data-ed="'+idx+'" data-edkey="'+esc(edKey)+'">'+
     '<div class="edbar"><span class="edfile">📄 '+esc(b.file||'practica.html')+'</span>'+
     '<span class="edbtns"><button type="button" class="runbtn" data-action="run">▶ Ejecutar</button>'+
     '<button type="button" class="resetbtn" data-action="reset">↺ Restablecer</button></span></div>'+
-    '<div class="edpanes"><textarea spellcheck="false" data-editor>'+esc(b.code)+'</textarea>'+
+    '<div class="edpanes"><textarea spellcheck="false" data-editor>'+esc(savedCode || b.code)+'</textarea>'+
     '<iframe class="edprev" title="Vista previa en vivo"></iframe></div></div>';
 }
 
@@ -3579,7 +3581,7 @@ function initDemos(root){
     });
   });
   /* app final */
-  $$('[data-appframe]', root).forEach(function(f){ f.srcdoc = FINAL_DEMO; });
+  $$('[data-appframe]', root).forEach(function(f){ f.srcdoc = FINAL_DEMO.replace(/<\\\//g, '</'); });
 }
 
 /* ---------- render de bloques ---------- */
@@ -3603,7 +3605,7 @@ function blockHtml(b, lessonId){
     case 'info': return boxHtml('info', b.title||'ℹ️ Info', b.h);
     case 'milestone': return boxHtml('milestone', b.title||'🏆 Hito', b.h);
     case 'table': return tableHtml(b);
-    case 'editor': return editorHtmlInner(b);
+    case 'editor': return editorHtmlInner(b, lessonId);
     case 'exercise': return exerciseHtml(b, lessonId);
     case 'quiz': return quizBlockHtml(lessonId, b);
     case 'domtree': return DOMTREE_HTML;
@@ -3739,7 +3741,7 @@ function viewReport(){
     '<td style="white-space:nowrap"><b>'+(state.examScore == null ? 0 : state.examScore)+'</b>/'+EXAM_MAX+' pts</td>'+
     '<td><div class="rbar"><div style="width:'+exPct+'%"></div></div></td></tr>';
 
-  const fecha = new Date().toLocaleDateString('es-MX', { year:'numeric', month:'long', day:'numeric' });
+  const fecha = new Date().toLocaleDateString(langPref()==='en' ? 'en-US' : 'es-MX', { year:'numeric', month:'long', day:'numeric' });
   const nombre = state.name ? esc(state.name) : '____________________';
 
   return '<div class="view">'+
@@ -3748,7 +3750,7 @@ function viewReport(){
     '<div class="grade-hero">'+
     '<div class="bigpct">'+pct+'<small>/100</small></div>'+
     '<div class="gh-info"><h3 style="font-size:18px">'+msg+'</h3>'+
-    '<p>'+pts+' de '+TOTAL_MAX+' puntos · '+doneCount+' de '+ALL_LESSONS.length+' lecciones completadas'+(state.examScore != null ? ' · examen: '+state.examScore+'/'+EXAM_MAX : '')+'</p>'+
+    '<p>'+pts+' '+(langPref()==='en'?'of':'de')+' '+TOTAL_MAX+' '+(langPref()==='en'?'points':'puntos')+' · '+doneCount+' '+(langPref()==='en'?'of':'de')+' '+ALL_LESSONS.length+' '+(langPref()==='en'?'lessons completed':'lecciones completadas')+(state.examScore != null ? ' · examen: '+state.examScore+'/'+EXAM_MAX : '')+'</p>'+
     (pct >= 70 ? '<button class="btn small green" data-nav="project">📦 Ir por el código del proyecto</button> <button class="btn small ghost" data-nav="exam">📝 '+(state.examScore == null?'Presentar examen':'Repetir examen')+'</button>' : '')+
     '</div></div>'+
     '<table class="rep"><thead><tr><th>Lección</th><th>Estado</th><th>Puntos</th><th>%</th></tr></thead><tbody>'+rows+'</tbody></table>'+
@@ -3880,6 +3882,200 @@ function updateChrome(){
 }
 
 /* ---------- router ---------- */
+const SRS_DECKS = {
+  webcore:{ name:'Conceptos Web esenciales', emoji:'🌐', desc:'HTML, CSS y JavaScript sin trucos: lo mínimo del curso que debes recordar sin pensar para construir y publicar tu lista de tareas.',
+    cards:[
+      {f:'<!DOCTYPE html>', es:'Primera línea del archivo: avisa al navegador «esto es HTML5 moderno»', ex:'sin ella el navegador entra en «modo raro»'},
+      {f:'elemento (anatomía)', es:'etiqueta de apertura + contenido + etiqueta de cierre', ex:'<h1>Mis tareas</h1>'},
+      {f:'<head>', es:'La sala de máquinas: configuración invisible para el navegador', ex:'meta charset, viewport, title, link al CSS'},
+      {f:'<body>', es:'Todo lo que el usuario ve y toca', ex:'títulos, párrafos, listas, botones'},
+      {f:'h1 … h6', es:'Jerarquía de títulos: un solo h1 por página y sin saltarte niveles', ex:'<h1>Lista</h1> → <h2>Hoy</h2>'},
+      {f:'<ul> + <li>', es:'Lista desordenada con sus elementos: el esqueleto de la app', ex:'<ul><li>Comprar pan</li></ul>'},
+      {f:'HTML semántico', es:'Etiquetas con significado: header, main, footer, section', ex:'mejor SEO y accesibilidad que div infinitos'},
+      {f:'regla CSS', es:'selector { propiedad: valor; }', ex:'h1 { color: #2563eb; }'},
+      {f:'.clase  vs  #id', es:'la clase se reutiliza en muchos elementos; el id es ÚNICO', ex:'.tarea · #titulo-principal'},
+      {f:'box model', es:'todo es una caja: contenido → padding → border → margin', ex:'padding: 12px; border: 1px solid;'},
+      {f:'let / const', es:'let es reasignable; const queda fija', ex:'const tareas = []; let total = 0;'},
+      {f:'querySelector()', es:'Busca en el DOM y devuelve el primer elemento que coincide', ex:"document.querySelector('ul')"},
+      {f:'addEventListener()', es:'Conecta un evento del usuario con una función', ex:"btn.addEventListener('click', agregarTarea)"},
+      {f:'createElement() + append()', es:'Crea un nodo nuevo y lo agrega al DOM en vivo', ex:'const li = document.createElement("li"); ul.append(li);'},
+      {f:'localStorage', es:'Memoria permanente del navegador: solo guarda TEXTO', ex:'localStorage.setItem("tareas", JSON.stringify(a))'},
+      {f:'git add → commit → push', es:'prepara los cambios → guarda una versión → súbelos a GitHub', ex:'git commit -m "Mi lista de tareas"'},
+      {f:'Bootstrap', es:'Framework CSS con clases listas para diseñar rápido', ex:'class="btn btn-primary"'}
+    ]}
+};
+const SRS_INTERVALS = [1, 2, 4, 8, 16];
+function srsStore(){ try{ if(!state.srs) state.srs = {}; return state.srs; }catch(e){ const f={}; try{ state = blankData(); state.srs = f; }catch(e2){} return f; } }
+function srsDueCards(deck){
+  const st = srsStore(), now = Date.now(), due = [];
+  (SRS_DECKS[deck].cards || []).forEach(function(c, i){
+    const key = deck + '-' + i;
+    const rec = st[key];
+    if(!rec || !rec.due || rec.due <= now) due.push(i);
+  });
+  return due;
+}
+function srsCounts(deck){
+  const st = srsStore(), now = Date.now();
+  let total = (SRS_DECKS[deck].cards || []).length, newc = 0, review = 0;
+  (SRS_DECKS[deck].cards || []).forEach(function(c, i){
+    const rec = st[deck + '-' + i];
+    if(!rec) newc++;
+    else if(rec.due <= now) review++;
+  });
+  return { total:total, nuevas:newc, repaso:review };
+}
+let SRS_SESSION = null;
+function srsStartSession(deck){
+  const due = srsDueCards(deck);
+  const st = srsStore();
+  const nuevas = due.filter(function(i){ return !st[deck + '-' + i]; }).slice(0, 10);
+  const repaso = due.filter(function(i){ return st[deck + '-' + i]; }).slice(0, 10);
+  SRS_SESSION = { deck:deck, queue:nuevas.concat(repaso), i:0, good:0, again:0, revealed:false };
+}
+function srsCardHtml(){
+  const s = SRS_SESSION;
+  const deck = SRS_DECKS[s.deck];
+  if(!s.queue.length){
+    return '<div class="srs-card"><div class="front">🎉</div><div class="es">No hay tarjetas para hoy de este mazo. ¡Vuelve mañana!</div></div>' +
+      '<div class="srs-actions"><button type="button" class="good" data-srs="exit">Volver</button></div>';
+  }
+  if(s.i >= s.queue.length){
+    saveState();
+    return '<div class="srs-card"><div class="front">✅ ¡Sesión lista!</div><div class="back">Correctas: <b>' + s.good + '</b> · A repasar: <b>' + s.again + '</b><br>Tu progreso quedó guardado en tu cuenta.</div></div>' +
+      '<div class="srs-actions"><button type="button" class="good" data-srs="exit">Volver</button></div>';
+  }
+  const idx = s.queue[s.i];
+  const c = deck.cards[idx];
+  const body = s.revealed
+    ? '<div class="back"><b>' + esc(c.f) + '</b> = ' + esc(c.es) + '<br><i>“' + esc(c.ex) + '”</i></div>'
+    : '<div class="front">' + esc(c.f) + '</div><div class="es" style="color:#94a3b8">¿Qué significa? Toca «Ver respuesta».</div>';
+  return '<div class="srs-card">' + body + '</div>' +
+    '<div class="srs-actions">' +
+    (s.revealed
+      ? '<button type="button" class="good" data-srs="good">😎 Lo sabía</button>' +
+        '<button type="button" class="again" data-srs="again">😕 Otra vez</button>'
+      : '<button type="button" class="good" data-srs="reveal">👀 Ver respuesta</button>') +
+    '</div>' +
+    '<div class="srs-prog">Tarjeta ' + (s.i + 1) + ' de ' + s.queue.length + ' · Caja ' + ((srsStore()[s.deck + '-' + idx] || {}).box != null ? (srsStore()[s.deck + '-' + idx].box + 1) : 1) + '/5</div>';
+}
+function srsHtml(b){
+  const deck = SRS_DECKS[b.deck];
+  if(!deck) return '';
+  const c = srsCounts(b.deck);
+  return '<div class="srsbox" data-srsbox="' + b.deck + '">' +
+    '<h3 class="quiz-title">🃏 ' + deck.emoji + ' ' + deck.name + '</h3>' +
+    '<p class="quiz-sub">' + (b.sub || deck.desc) + '</p>' +
+    '<div class="srs-stats"><span class="srs-chip">🆕 Nuevas: ' + c.nuevas + '</span>' +
+    '<span class="srs-chip">🔁 Por repasar: ' + c.repaso + '</span>' +
+    '<span class="srs-chip">📚 Total: ' + c.total + '</span></div>' +
+    '<div class="srs-zone">' + (SRS_SESSION && SRS_SESSION.deck === b.deck ? srsCardHtml() :
+      '<button type="button" class="btn" data-srs="start" data-deck="' + b.deck + '">▶ Repasar (' + (c.nuevas + c.repaso) + ' pendientes)</button>') + '</div>' +
+    '</div>';
+}
+function srsAction(el){
+  const act = el.getAttribute('data-srs');
+  const box = el.closest('[data-srsbox]');
+  const deck = box ? box.getAttribute('data-srsbox') : (el.getAttribute('data-deck') || (SRS_SESSION && SRS_SESSION.deck));
+  if(act === 'start'){ srsStartSession(deck); }
+  else if(act === 'exit'){ SRS_SESSION = null; saveState(); if(box){ const zone2 = box.querySelector('.srs-zone'); if(zone2) zone2.innerHTML = ''; } try{ renderSidebar(CURRENT); }catch(e2){} return; }
+  else if(!SRS_SESSION) return;
+  else if(act === 'reveal'){ SRS_SESSION.revealed = true; }
+  else if(act === 'good' || act === 'again'){
+    const s = SRS_SESSION;
+    const idx = s.queue[s.i];
+    const st = srsStore();
+    const rec = st[deck + '-' + idx] || { box:0, due:0 };
+    if(act === 'good'){ rec.box = Math.min(4, (rec.box || 0) + 1); s.good++; }
+    else { rec.box = 0; s.again++; if(s.queue.indexOf(idx) === s.queue.lastIndexOf(idx)) s.queue.push(idx); }
+    rec.due = Date.now() + SRS_INTERVALS[rec.box] * 86400000;
+    st[deck + '-' + idx] = rec;
+    SRS_SESSION.i++;
+    SRS_SESSION.revealed = false;
+    saveState();
+  } else return;
+  if(box){ const zone = box.querySelector('.srs-zone'); if(zone) zone.innerHTML = srsCardHtml(); }
+  try{ renderSidebar(CURRENT); }catch(e){}
+}
+/* ---------- envolturas: menú lateral + rutas + render de #/repaso ---------- */
+(function(){
+  const __origRenderSidebar = renderSidebar;
+  renderSidebar = function(route){
+    __origRenderSidebar(route);
+    const side = document.getElementById('sidebar');
+    if(!side) return;
+    let due = 0;
+    Object.keys(SRS_DECKS).forEach(function(k){ due += srsCounts(k).nuevas + srsCounts(k).repaso; });
+    side.insertAdjacentHTML('beforeend',
+      '<button class="sextra" data-um-nav="srs">🃏 ' + (langPref() === 'en' ? 'Daily review' : 'Repaso del día') + (due ? '<span class="sscore" style="margin-left:auto">' + due + '</span>' : '') + '</button>');
+  };
+  const __origParseHash = parseHash;
+  parseHash = function(){
+    try{
+      const h = (location.hash || '').replace(/^#\/?/, '');
+      if(h === 'repaso') return { view:'srs' };
+    }catch(e){}
+    return __origParseHash();
+  };
+  const __origRouteHash = routeHash;
+  routeHash = function(r){ if(r && r.view === 'srs') return '#/repaso'; return __origRouteHash(r); };
+  const __origRender = render;
+  render = function(){
+    if(CURRENT && CURRENT.view === 'srs'){
+      const content = document.getElementById('content');
+      content.innerHTML = viewSRS();
+      try{ initDemos(content); }catch(e){}
+      renderSidebar(CURRENT);
+      updateChrome();
+      try{ window.scrollTo({ top:0, left:0, behavior:'instant' }); }catch(e){ window.scrollTo(0, 0); }
+      try{ content.scrollTop = 0; }catch(e){}
+      return;
+    }
+    return __origRender();
+  };
+})();
+function viewSRS(){
+  let h = '<div class="view"><h2 style="font-size:26px;letter-spacing:-.02em">🃏 Repaso del día <small style="color:#64748b;font-size:14px;font-weight:600">repetición espaciada (SRS)</small></h2>' +
+    '<p class="lead-text">Cinco minutos al día aquí valen más que dos horas el domingo: repasa cada tarjeta justo antes de olvidarla. Aciertas → la tarjeta sube de caja (1→2→4→8→16 días). Fallas → vuelve a la caja 1, sin culpa.</p>';
+  Object.keys(SRS_DECKS).forEach(function(k){
+    const d = SRS_DECKS[k], c = srsCounts(k);
+    h += '<div class="srsbox" data-srsbox="' + k + '"><h3 class="quiz-title" style="margin:0">' + d.emoji + ' ' + d.name + '</h3>' +
+      '<p class="quiz-sub">' + d.desc + '</p>' +
+      '<div class="srs-stats"><span class="srs-chip">🆕 Nuevas: ' + c.nuevas + '</span><span class="srs-chip">🔁 Por repasar: ' + c.repaso + '</span><span class="srs-chip">📚 Total: ' + c.total + '</span></div>' +
+      '<button type="button" class="btn" data-srs="start" data-deck="' + k + '">▶ Repasar ahora</button> ' +
+      '<button type="button" class="btn ghost" data-nav="lesson" data-id="1-1">📘 Lección relacionada</button>' +
+      '<div class="srs-zone" style="margin-top:10px">' + (SRS_SESSION && SRS_SESSION.deck === k ? srsCardHtml() : '') + '</div></div>';
+  });
+  h += '<div class="box info"><span class="box-title">🧠 ¿Cómo funciona?</span>Es el sistema Leitner: cada tarjeta vive en una caja con su intervalo de repaso (1, 2, 4, 8 y 16 días). Al acertar sube; al fallar regresa a la caja 1. Tu progreso se guarda en tu cuenta. El contexto completo está en el 📘 <button type="button" class="btn ghost" data-nav="book" data-id="1">Libro de texto</button>.</div></div>';
+  return h;
+}
+/* ---------- delegación de clics: SRS ---------- */
+document.addEventListener('click', function(e){
+  const tgt = e.target;
+  const srs = tgt.closest ? tgt.closest('[data-srs]') : null;
+  if(srs){ srsAction(srs); return; }
+  const navSrs = tgt.closest ? tgt.closest('[data-um-nav="srs"]') : null;
+  if(navSrs){
+    try{ if(location.hash !== '#/repaso') location.hash = '#/repaso'; else { CURRENT = parseHash(); render(); } }catch(err){}
+    const sb = document.getElementById('sidebar'); if(sb) sb.classList.remove('open');
+    return;
+  }
+});
+
+
+/* ---------- persistencia del código de los editores ---------- */
+let ED_SAVE_T = null;
+document.addEventListener('input', function(e){
+  const ta = e.target;
+  if(!(ta.matches && ta.matches('.edwrap textarea[data-editor]'))) return;
+  const w = ta.closest('.edwrap');
+  const key = w ? w.getAttribute('data-edkey') : null;
+  if(!key) return;
+  if(!state.edCode) state.edCode = {};
+  clearTimeout(ED_SAVE_T);
+  ED_SAVE_T = setTimeout(function(){ try{ state.edCode[key] = ta.value; saveState(); }catch(err){} }, 400);
+});
+
 let CURRENT = { view:'home', id:null };
 function parseHash(){
   try{
@@ -4001,12 +4197,15 @@ document.addEventListener('click', function(e){
     copyText(CODE_STORE[Number(actionEl.getAttribute('data-code'))] || '', actionEl);
   } else if(action === 'run'){
     const w = actionEl.closest('.edwrap');
-    $('.edprev', w).srcdoc = $('textarea', w).value;
+    const taRun = $('textarea', w);
+    $('.edprev', w).srcdoc = taRun.value;
+    try{ const key = w.getAttribute('data-edkey'); if(key){ if(!state.edCode) state.edCode = {}; state.edCode[key] = taRun.value; saveState(); } }catch(e){}
   } else if(action === 'reset'){
     const w = actionEl.closest('.edwrap');
     const ta = $('textarea', w);
     ta.value = EDITOR_CODES[Number(w.getAttribute('data-ed'))] || '';
     $('.edprev', w).srcdoc = ta.value;
+    try{ const key = w.getAttribute('data-edkey'); if(key && state.edCode){ delete state.edCode[key]; saveState(); } }catch(e){}
   } else if(action === 'grade-quiz'){
     const section = actionEl.closest('[data-quiz]');
     const lessonId = section.getAttribute('data-quiz');
@@ -4106,7 +4305,7 @@ function handleRecovery(kind){
     } else if(kind === 'wipe-course'){
       safeStore.remove(LEGACY_KEY);
       const u = sessionUser();
-      if(u && DB.users[u]){ DB.users[u].data = blankData(); DB.users[u].dataJs = blankData(); saveDB(); }
+      if(u && DB.users[u]){ DB.users[u].dataEn = blankData(); DB.users[u].dataJs = blankData(); saveDB(); }
       state = blankData();
       CURRENT = { view:'home' };
       hideAuth();
@@ -4144,9 +4343,13 @@ const CAMPUS = {
   thisCourse:'c1',
   tagline:{ es:'Curso interactivo · Crea tu Lista de Tareas', en:'Interactive course · Build your To-Do List' },
   courses:[
-    { id:'c1', file:'index.html',      emoji:'📝', name:{es:'Lista de Tareas', en:'To-Do List'},   total:29, max:1300, examMax:300, dataKey:'data'   },
+    { id:'c1', file:'index.html',      emoji:'📝', name:{es:'Lista de Tareas', en:'To-Do List'},   total:29, max:1300, examMax:300, dataKey:'dataEn' },
     { id:'c2', file:'javascript.html', emoji:'🎮', name:{es:'Juego de Memoria', en:'Memory Game'}, total:26, max:3715, examMax:300, dataKey:'dataJs' },
-    { id:'c3', file:'ingles.html',     emoji:'🇬🇧', name:{es:'Inglés B1', en:'English B1'},         total:34, max:4329, examMax:300, dataKey:'dataEn' }
+    { id:'c3', file:'ingles.html',     emoji:'🇬🇧', name:{es:'Inglés B1', en:'English B1'},         total:34, max:4329, examMax:300, dataKey:'dataEn' },
+    { id:'c4', file:'sql.html',        emoji:'🗄️', name:{es:'Bases de datos SQL', en:'SQL Databases'}, total:30, max:3040, examMax:300, dataKey:'dataSql' },
+    { id:'c5', file:'python.html',     emoji:'🐍', name:{es:'Python desde cero', en:'Python from scratch'}, total:30, max:4014, examMax:300, dataKey:'dataPy' },
+    { id:'c6', file:'unreal.html',     emoji:'🎮', name:{es:'Unreal Engine desde cero', en:'Unreal Engine from scratch'}, total:30, max:4055, examMax:300, dataKey:'dataUnreal' },
+  { id:'c7', file:'unity.html',      emoji:'🕹️', name:{es:'Unity desde cero (C#)', en:'Unity from scratch (C#)'}, total:30, max:3780, examMax:300, dataKey:'dataUnity' }
   ]
 };;
 
@@ -4375,14 +4578,25 @@ document.addEventListener('keydown', function(e){
   fillOk = function(q, val){
     const v = String(val||'').trim();
     if(v === '') return false;
-    try{ if(q.re && new RegExp(q.re,'i').test(v)) return true; }catch(e){}
-    const nv = norm(v).replace(/[<>]/g,'');
+    // normalización defensiva: lo que los teclados reales escriben
+    const limpiar = function(s){
+      return String(s)
+        .replace(/[\u00A0\u2000-\u200B\uFEFF]/g,' ')     // espacios invisibles → espacio
+        .replace(/[\u2013\u2014\u2212]/g,'-')               // guiones "inteligentes" → -
+        .replace(/[\u2018\u2019\u201B]/g,"'")               // apóstrofes curvos → '
+        .replace(/[\u201C\u201D]/g,'"')                      // comillas curvas → "
+        .replace(/\s+/g,' ')
+        .trim();
+    };
+    const v2 = limpiar(v);
+    try{ if(q.re && (new RegExp(q.re,'i').test(v) || new RegExp(q.re,'i').test(v2))) return true; }catch(e){}
+    const nv = norm(v2).replace(/[<>]/g,'');
     if((q.accept||[]).some(function(a){ return norm(a).replace(/[<>]/g,'') === nv; })) return true;
     // la respuesta modelo (q.show) siempre es válida: comparación laxa sin símbolos
     try{
       if(q.show){
         const loose = function(s){ return norm(s).replace(/[^a-z0-9]/g,''); };
-        if(loose(v) !== '' && loose(v) === loose(q.show)) return true;
+        if(loose(v2) !== '' && loose(v2) === loose(q.show)) return true;
       }
     }catch(e){}
     return false;
@@ -4444,7 +4658,29 @@ const CHROME_I18N = [
   ['🎧 Escuchar','🎧 Listen'],
   ['✅ ¡Sesión lista!','✅ Session complete!'],
   ['Correctas: <b>','Correct: <b>'],
-  ['A repasar: <b>','To review: <b>']
+  ['A repasar: <b>','To review: <b>'],
+  ['pendiente</span>','pending</span>'],
+  ['completada</span>','completed</span>'],
+  ['presentado</span>','taken</span>'],
+  ['📝 <b>Examen final</b>','📝 <b>Final exam</b>'],
+  ['<th>Lección</th><th>Estado</th><th>Puntos</th><th>%</th>','<th>Lesson</th><th>Status</th><th>Points</th><th>%</th>'],
+  ['>Presentar examen<','>Take the exam<'],
+  ['>Repetir examen<','>Retake exam<'],
+  ['Ej. Ana Martínez','e.g. Jane Doe'],
+  ['>📦 Ir por el código del proyecto<','>📦 Get the project code<'],
+  ['Tu progreso oficial del curso «Construye tu Lista de Tareas». Cada quiz y ejercicio aprobado suma; tu mejor intento siempre cuenta.','Your official progress for the course “Build your To-Do List”. Every passed quiz and exercise counts; your best attempt is always kept.'],
+  ['🏆 Nivel: Desarrollador Web Destacado. ¡Dominio total!','🏆 Level: Outstanding Web Developer. Total mastery!'],
+  ['🎉 ¡APROBADO! Ya sabes construir y publicar una aplicación web completa.','🎉 PASSED! You can build and publish a complete web application.'],
+  ['📚 Buen avance. Completa las lecciones pendientes y repite quizzes para subir tu nota.','📚 Good progress. Finish the pending lessons and retake quizzes to raise your grade.'],
+  ['💪 El viaje apenas comienza: cada quiz aprobado suma puntos. ¡Tú puedes!','💪 The journey is just beginning: every passed quiz adds points. You can do it!'],
+  ['🌐 Conceptos Web esenciales','🌐 Essential Web Concepts'],
+  ['HTML, CSS y JavaScript sin trucos: lo mínimo del curso que debes recordar sin pensar para construir y publicar tu lista de tareas.','Plain HTML, CSS and JavaScript: the minimum from the course you must remember without thinking to build and publish your to-do list.'],
+  ['🧠 ¿Cómo funciona?','🧠 How does it work?'],
+  ['📘 Lección relacionada','📘 Related lesson'],
+  ['No hay tarjetas para hoy de este mazo. ¡Vuelve mañana!','No cards due from this deck today. Come back tomorrow!'],
+  ['Tu progreso quedó guardado en tu cuenta.','Your progress was saved to your account.'],
+  ['Cinco minutos al día aquí valen más que dos horas el domingo: repasa cada tarjeta justo antes de olvidarla. Aciertas → la tarjeta sube de caja (1→2→4→8→16 días). Fallas → vuelve a la caja 1, sin culpa.','Five minutes a day here beat two hours on Sunday: review each card right before you forget it. Correct answers move the card up a box (1→2→4→8→16 days); misses send it back to box 1, no guilt.'],
+  ['Es el sistema Leitner: cada tarjeta vive en una caja con su intervalo de repaso (1, 2, 4, 8 y 16 días). Al acertar sube; al fallar regresa a la caja 1. Tu progreso se guarda en tu cuenta. El contexto completo está en el 📘 ','This is the Leitner system: each card lives in a box with its review interval (1, 2, 4, 8 and 16 days). Correct answers move it up; misses send it back to box 1. Your progress is saved to your account. The full context is in the 📘 ']
 ];
 function i18nChrome(html){
   if(langPref() !== 'en') return html;
